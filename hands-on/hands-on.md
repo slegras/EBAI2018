@@ -10,11 +10,10 @@
 7. [ChIP quality controls](#cqc)
 8. [Visualizing the data in a genome browser](#visualize)
 9. [Peak calling with MACS](#macs)
-10. [Peak annotation](#annotation)
-11. [Motif analysis](#motif)
-12. [Peak annotation using R](#peakr)
-13. [FAQ](#faq)
-14. [References](#ref)
+10. [Motif analysis](#motif)
+11. [Peak annotation using R](#peakr)
+12. [FAQ](#faq)
+13. [References](#ref)
 
 
 
