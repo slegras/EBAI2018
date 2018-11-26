@@ -547,16 +547,16 @@ cd ..
 For the motif analysis, you first need to extract the sequences corresponding to the peaks. There are several ways to do this (as usual...). If you work on a UCSC-supported organism, the easiest is to use RSAT fetch-sequences or Galaxy. Here, we will use Bedtools, as we have the genome of interest on our computer (Escherichia_coli_K12.fasta).
 1. Create a directory named **07-MotifAnalysis** to store data needed for motif analysis
 ```bash
-mkdir 07-MotifAnalysis
+mkdir 06-MotifAnalysis
 ```
 2. Go to the newly created directory
 ```bash
-cd 07-MotifAnalysis
+cd 06-MotifAnalysis
 ```
 
 Your directory structure should be like this:
 ```
-/shared/projects/training/<login>/EBA2017_chipseq
+/shared/projects/training/<login>/EBA2018_chipseq
 │
 └───data
 │   
@@ -574,19 +574,17 @@ Your directory structure should be like this:
 │   
 └───05-PeakCalling
 │   
-└───06-PeakAnnotation
-│   
-└───07-MotifAnalysis <- you should be in this folder
+└───06-MotifAnalysis <- you should be in this folder
 ```
 
 
 3. Extract peak sequence in fasta format
 ```bash
 ## Create an index of the genome fasta file
-srun samtools faidx ../data/Escherichia_coli_K12.fasta
+samtools faidx ../data/Escherichia_coli_K12.fasta
 
 ## Extract fasta sequence from genomic coordinate of peaks
-srun bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
+bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
 -bed ../05-PeakCalling/FNR_Anaerobic_A_peaks.bed -fo FNR_Anaerobic_A_peaks.fa
 ```
 
@@ -608,15 +606,15 @@ srun bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
 ### 3 - Motif discovery with RSAT (short peaks)
 1. Restrict the dataset to the summit of the peaks +/- 100bp using bedtools slop. Using bedtools slop to extend genomic coordinates allow not to go beyond chromosome boundaries as the user give the size of chromosomes as input (see fai file).
 ```bash
-srun bedtools slop -b 100 -i ../05-PeakCalling/FNR_Anaerobic_A_summits.bed -g ../data/Escherichia_coli_K12.fasta.fai > FNR_Anaerobic_A_summits+-100.bed
+bedtools slop -b 100 -i ../05-PeakCalling/FNR_Anaerobic_A_summits.bed -g ../data/Escherichia_coli_K12.fasta.fai > FNR_Anaerobic_A_summits+-100.bed
 ```
 2. Extract the sequences for this BED file
 ```bash
 ## Extract fasta sequence from genomic coordinate of peaks
-srun bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta -bed FNR_Anaerobic_A_summits+-100.bed -fo FNR_Anaerobic_A_summits+-100.fa
+bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta -bed FNR_Anaerobic_A_summits+-100.bed -fo FNR_Anaerobic_A_summits+-100.fa
 
 ## Compress the genome file as we won't need it anymore
-srun gzip ../data/Escherichia_coli_K12.fasta
+gzip ../data/Escherichia_coli_K12.fasta
 ```
 3. Run RSAT peak-motifs with the same options, but choosing as input file this new dataset (FNR_Anaerobic_A_summits+-100.fa)
 and setting the title box to **FNR Anaerobic A summit +/-100bp**
