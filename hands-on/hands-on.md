@@ -378,9 +378,38 @@ scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<lo
 
 **Look at the result files fingerprint.png. What do you think of it?**  
 
+### 2 - Checking two ENCODE quality metrics with PhantomPeakQualTools
+1. convert the BAM file into TagAlign format, specific to the program that calculates the quality metrics
+```bash
+samtools view -F 0x0204 -o - ../02-Mapping/IP/SRR576933.bam | \
+gawk 'BEGIN{OFS="\t"}{if (and($2,16) > 0) {print $3,($4-1),($4-1+length($10)),"N","1000","-"}
+else {print $3,($4-1),($4-1+length($10)),"N","1000","+"} }' \
+ | gzip -c > SRR576933_experiment.tagAlign.gz
+```
+2. Load a new conda environment to run [phantompeakqualtools](https://github.com/crazyhottommy/phantompeakqualtools)
+```bash
+source activate eba2017_spp
+```
+3. Run phantompeakqualtools
+  * c=<ChIP_alignFile>, full path and name (or URL) of tagAlign/BAM file (can be gzipped)(FILE EXTENSION MUST BE tagAlign.gz, tagAlign, bam or bam.gz) MANDATORY ARGUMENTS FOR PEAK CALLING
+  * -savp=<plotdatafile> OR -savp, save cross-correlation plot
+  * -out=<resultfile>, append peakshift/phantomPeak results to a file
+```bash
+Rscript ../scripts/phantompeakqualtools/run_spp.R -c=SRR576933_experiment.tagAlign.gz  -savp -out=SRR576933_IP_phantompeaks
+```
 
+**A PDF file named SRR576933_experiment.tagAlign.pdf should have been produced.  
+According to the ENCODE guidelines, NSC >= 1.05 ; RSC >= 0.8 is recommended. Qtag values range from -2,-1,0,1,2  
+What is the quality of this dataset ?**
 
-Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2018_chipseq)
+**At this point, you should be able to measure the ENCODE RSC and NSC metric values on a given dataset.**
+
+4. Load the previous conda environment for ChIP-Seq to continue the tutorial
+```bash
+source activate eba2017_chipseq
+```
+
+Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2017_chipseq)
 ```bash
 ## If you are in 03-ChIPQualityControls
 cd ..
@@ -423,11 +452,11 @@ bamCoverage --help
 ```
 2. Create a directory named **04-Visualization** to store bamCoverage outputs
 ```bash
-mkdir 03-Visualization
+mkdir 04-Visualization
 ```
 3. Go to the newly created directory
 ```bash
-cd 03-Visualization
+cd 04-Visualization
 ```
 
 Your directory structure should be like this:
@@ -445,7 +474,9 @@ Your directory structure should be like this:
 |    └───IP
 |    └───Control
 │   
-└───03-Visualization <- you should be in this folder
+└───03-ChIPQualityControls
+│   
+└───04-Visualization <- you should be in this folder
 ```
 
 4. Generate a scaled bigwig file on the IP with bamCoverage
