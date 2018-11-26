@@ -334,7 +334,12 @@ METRICS_FILE=metrics \
 VALIDATION_STRINGENCY=STRICT
 ```
 
-**How many duplicates reads are detected? (See MarkDuplicates outputs)**
+To determine the number of duplicated reads marked by Picard, we can run the `samtools flagstat command`:
+
+```bash
+samtools flagstat Marked_SRR576933.bam
+```
+
 
 Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2017_chipseq)
 ```bash
