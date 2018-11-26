@@ -100,11 +100,35 @@ mkdir EBA2018_chipseq
 ```bash
 cd EBA2018_chipseq
 ```
-5. Copy directories containing data and scripts needed for the training. WARNING : remember, we don't use qlogin on the Strasbourg server, but ` srun ` in front of each command, so that it  runs  on a computing node.
+5. Start an interactive session
+```bash
+sinteractive
+```
+6. Copy directories containing data and scripts needed for the training. WARNING : remember, we don't use qlogin on the Strasbourg server, but ` srun ` in front of each command, so that it  runs  on a computing node.
 
 ```bash
-srun cp -r /shared/projects/training/slegras/EBA2017_chipseq/data \
+cp -r /shared/projects/training/slegras/EBA2017_chipseq/data \
 /shared/projects/training/slegras/EBA2017_chipseq/scripts/ .
+```
+
+7. Your directory structure should be like this
+ ```
+/shared/projects/eba2018_<login>/EBA2018_chipseq
+│
+└───data
+│   
+└───scripts
+│   
+└───01-QualityControl
+│   
+└───02-Mapping
+|    └───index
+|    └───IP
+|    └───Control
+│   
+└───03-ChIPQualityControls
+│   
+└───04-Visualization <- you should be in this folder
 ```
 
 ## Quality control of the reads and statistics <a name="qc"></a>
@@ -121,15 +145,26 @@ mkdir 01-QualityControl
 ```bash
 cd 01-QualityControl
 ```
+
+Your directory structure should be like this
+ ```
+/shared/projects/eba2018_<login>/EBA2018_chipseq
+│
+└───data
+│   
+└───scripts
+│   
+└───01-QualityControl <- you should be in this folder
+```
 3. Check the help page of the program to see its usage and parameters.
 
 ```bash
-srun fastqc --help
+fastqc --help
 ```
 4. Launch the FASTQC program on the experiment file (SRR576933.fastq.gz)
   * -o: creates all output files in the specified output directory. '.' means current directory.
 ```bash
-srun --mem=5G fastqc ../data/SRR576933.fastq.gz -o .
+fastqc ../data/SRR576933.fastq.gz -o .
 ```  
 5. Wait until the analysis is finished. Check the files output by the program.
 ```bash
