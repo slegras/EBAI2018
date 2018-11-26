@@ -255,6 +255,22 @@ mkdir IP
 ```bash
 cd IP
 ```
+Your directory structure should be like this:
+```
+/shared/projects/training/<login>/EBA2017_chipseq
+│
+└───data
+│   
+└───scripts
+│   
+└───01-QualityControl
+│   
+└───02-Mapping
+|    └───index
+|    └───IP
+```
+
+
 3. Let's see the parameters of bowtie before launching the mapping:
   * Escherichia_coli_K12 is the name of our genome index file
   * Number of mismatches for SOAP-like alignment policy (-v): to 2, which will allow two mismatches anywhere in the read, when aligning the read to the genome sequence.
@@ -282,7 +298,7 @@ samtools sort SRR576933.sam | samtools view -b > SRR576933.bam
 samtools index SRR576933.bam
 ```
 
-6. Compress the .sam file
+6. Compress the .sam file (you could also delete the file)
 ```bash
 gzip SRR576933.sam
 ```
