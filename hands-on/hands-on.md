@@ -556,7 +556,7 @@ cd 06-MotifAnalysis
 
 Your directory structure should be like this:
 ```
-/shared/projects/training/<login>/EBA2018_chipseq
+/shared/projects/eba2018_<login>/EBA2018_chipseq
 │
 └───data
 │   
