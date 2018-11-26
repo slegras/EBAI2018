@@ -195,7 +195,8 @@ mkdir 02-Mapping
 ```bash
 cd 02-Mapping
 ```
-
+ 
+ 
 ### 3 - Prepare the index file
 1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta.gz in the course folder) (The genome was downloaded from the NCBI). Note that we will not work with the latest version (NC_000913.3) but the previous one (NC_000913.2), because the available tools for visualization have not been updated yet to the latest version. This will not affect our results.
 2. Create a directory named **index** in which to output bowtie indexes
