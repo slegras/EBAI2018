@@ -381,7 +381,7 @@ scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<lo
 ### 2 - Checking two ENCODE quality metrics with PhantomPeakQualTools
 1. convert the BAM file into TagAlign format, specific to the program that calculates the quality metrics
 ```bash
-srun samtools view -F 0x0204 -o - ../02-Mapping/IP/SRR576933.bam | \
+samtools view -F 0x0204 -o - ../02-Mapping/IP/SRR576933.bam | \
 gawk 'BEGIN{OFS="\t"}{if (and($2,16) > 0) {print $3,($4-1),($4-1+length($10)),"N","1000","-"}
 else {print $3,($4-1),($4-1+length($10)),"N","1000","+"} }' \
  | gzip -c > SRR576933_experiment.tagAlign.gz
@@ -395,7 +395,7 @@ source activate eba2017_spp
   * -savp=<plotdatafile> OR -savp, save cross-correlation plot
   * -out=<resultfile>, append peakshift/phantomPeak results to a file
 ```bash
-srun Rscript ../scripts/phantompeakqualtools/run_spp.R -c=SRR576933_experiment.tagAlign.gz  -savp -out=SRR576933_IP_phantompeaks
+Rscript ../scripts/phantompeakqualtools/run_spp.R -c=SRR576933_experiment.tagAlign.gz  -savp -out=SRR576933_IP_phantompeaks
 ```
 
 **A PDF file named SRR576933_experiment.tagAlign.pdf should have been produced.  
