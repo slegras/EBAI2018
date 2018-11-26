@@ -205,7 +205,7 @@ There are multiple programs to perform the mapping step. For reads produced by a
 ### 2 - Bowtie
 1. Try out bowtie
 ```bash
-srun bowtie
+bowtie
 ```
 This prints the help of the program. However, this is a bit difficult to read ! If you need to know more about the program, it's easier to directly check the manual on the [website](http://bowtie-bio.sourceforge.net/manual.shtml).
 
@@ -264,15 +264,8 @@ cd IP
   * -S will output the result in SAM format
   * 2> SRR576933.out will output some statistics about the mapping in the file SRR576933.out
 ```bash  
-## Unzip fastq IP file
-srun gunzip ../../data/SRR576933.fastq.gz
-
 ## Run alignment
-srun bowtie ../index/Escherichia_coli_K12 ../../data/SRR576933.fastq -v 2 -m 1 -3 1 -S 2> SRR576933.out > SRR576933.sam
-
-## Compress back fastq IP file
-srun gzip ../../data/SRR576933.fastq
-
+bowtie ../index/Escherichia_coli_K12 ../../data/SRR576933.fastq.gz -v 2 -m 1 -3 1 -S 2> SRR576933.out > SRR576933.sam
 ```  
 This should take few minutes as we work with a small genome. For the human genome, we would need either more time and more resources.
 
@@ -281,17 +274,17 @@ Bowtie output is a [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) file. T
 4. Sort the sam file and create a bam file using samtools
   * -b: output BAM
 ```bash
-srun samtools sort SRR576933.sam | samtools view -b > SRR576933.bam
+samtools sort SRR576933.sam | samtools view -b > SRR576933.bam
 ```
 
 5. Create an index for the bam file
 ```bash
-srun samtools index SRR576933.bam
+samtools index SRR576933.bam
 ```
 
 6. Compress the .sam file
 ```bash
-srun gzip SRR576933.sam
+gzip SRR576933.sam
 ```
 
 **Analyze the result of the mapped reads:  
