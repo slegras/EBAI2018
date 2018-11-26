@@ -165,10 +165,10 @@ ls
 ```bash
 ### OPEN A NEW TERMINAL
 ## Create a directory where to put generated files on your computer
-mkdir ~/Desktop/EBA2017_chipseq
+mkdir ~/Desktop/EBA2018_chipseq
 
 ## Go to the location on your computer, where you want to put the data, for example:
-cd ~/Desktop/EBA2017_chipseq
+cd ~/Desktop/EBA2018_chipseq
 
 ## Download the file
 scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/eba2018_<login>/EBA2018_chipseq/01-QualityControl/SRR576933_fastqc.html .
@@ -223,7 +223,7 @@ cd 02-Mapping
 
 
 ### 3 - Prepare the index file
-1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta.gz in the course folder) (The genome was downloaded from the NCBI). Note that we will not work with the latest version (NC_000913.3) but the previous one (NC_000913.2), because the available tools for visualization have not been updated yet to the latest version. This will not affect our results.
+1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta in the course folder) (The genome was downloaded from the NCBI). Note that we will not work with the latest version (NC_000913.3) but the previous one (NC_000913.2), because the available tools for visualization have not been updated yet to the latest version. This will not affect our results.
 2. Create a directory named **index** in which to output bowtie indexes
 ```bash
 mkdir index
@@ -257,7 +257,7 @@ cd IP
 ```
 Your directory structure should be like this:
 ```
-/shared/projects/training/<login>/EBA2017_chipseq
+/shared/projects/eba2018_<login>/EBA2018_chipseq
 │
 └───data
 │   
@@ -369,7 +369,7 @@ plotFingerprint -b ../02-Mapping/IP/SRR576933.bam ../02-Mapping/Control/SRR57693
 ```bash
 ### OPEN A NEW TERMINAL
 ## Go to the location on your computer, where you want to put the data
-cd ~/Desktop/EBA2017_chipseq
+cd ~/Desktop/EBA2018_chipseq
 
 ## Download the file
 scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<login>/EBA2018_chipseq/03-ChIPQualityControls/fingerprint.png .
@@ -461,7 +461,7 @@ cd 04-Visualization
 
 Your directory structure should be like this:
 ```
-/shared/projects/training/<login>/EBA2017_chipseq
+/shared/projects/eba2018_<login>/EBA2018_chipseq
 │
 └───data
 │   
@@ -488,7 +488,7 @@ Your directory structure should be like this:
   * --extendReads 200: Extend reads to fragment size
   * --ignoreDuplicates: reads that have the same orientation and start position will be considered only once
 ```bash
-srun --mem=3G bamCoverage --bam ../02-Mapping/IP/Marked_SRR576933.bam \
+bamCoverage --bam ../02-Mapping/IP/Marked_SRR576933.bam \
 --outFileName SRR576933_nodup.bw --outFileFormat bigwig --normalizeTo1x 4639675 \
 --skipNonCoveredRegions --extendReads 200 --ignoreDuplicates
 ```
@@ -505,7 +505,7 @@ srun --mem=3G bamCoverage --bam ../02-Mapping/IP/Marked_SRR576933.bam \
 **Go back to the genes we looked at earlier: b1127, b1108. Look at the shape of the signal.**  
 **Keep IGV opened.**
 
-Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2017_chipseq)
+Go back to working home directory (i.e /shared/projects/eba2018_<login>/EBA2018_chipseq)
 ```bash
 ## If you are in 04-Visualization
 cd ..
