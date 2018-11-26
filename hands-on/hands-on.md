@@ -350,6 +350,7 @@ cd ../..
 ## ChIP quality controls <a name="cqc"></a>
 **Goal**: The first exercise aims at plotting the **Lorenz curve** to assess the quality of the chIP. The second exercise aims at calculating the **NSC** and **RSC** ENCODE quality metrics. These metrics allow to classify the datasets (after mapping, contrary to FASTQC that works on raw reads) in regards to the NSC and RSC values observed in the ENCODE datasets (see ENCODE guidelines)
 
+
 ### 1 - Plot the Lorenz curve with Deeptools
 1. Create a directory named **03-ChIPQualityControls** in which to mapping results for IP
 ```bash
