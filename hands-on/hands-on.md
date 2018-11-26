@@ -454,14 +454,15 @@ Your directory structure should be like this:
   * --bam: BAM file to process
   * --outFileName: output file name
   * --outFileFormat: Output file type
-  * --normalizeTo1x EFFECTIVE GENOME SIZE LENGTH: Report read coverage normalized to 1x sequencing depth. Effective genome size length here is the length of the genome
+  * --effectiveGenomeSize : size of the mappable genome
+  * --normalizeUsing : different overall normalization methods; we will use RPGC method corresponding to 1x average coverage
   * --skipNonCoveredRegions: skip non-covered regions
   * --extendReads 200: Extend reads to fragment size
   * --ignoreDuplicates: reads that have the same orientation and start position will be considered only once
 ```bash
 bamCoverage --bam ../02-Mapping/IP/Marked_SRR576933.bam \
---outFileName SRR576933_nodup.bw --outFileFormat bigwig --normalizeTo1x 4639675 \
---skipNonCoveredRegions --extendReads 200 --ignoreDuplicates
+--outFileName SRR576933_nodup.bw --outFileFormat bigwig --effectiveGenomeSize 4639675 \
+--normalizeUsing RPGC --skipNonCoveredRegions --extendReads 200 --ignoreDuplicates
 ```
 5. Do it for the control (be careful for the control you will need **5G** of memory to process the file)
 6. Download the two bigwig files you have just generated
