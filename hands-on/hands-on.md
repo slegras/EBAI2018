@@ -529,7 +529,7 @@ cd 05-PeakCalling
 ```
 3. Try out MACS
 ```bash
-srun macs
+macs
 ```
 This prints the help of the program.
 
@@ -545,7 +545,7 @@ This prints the help of the program.
   * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset.
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-srun macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.bam --format BAM  --gsize 4639675 \
+macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.bam --format BAM  --gsize 4639675 \
 --name "FNR_Anaerobic_A" --bw 400 --diag &> MACS.out
 ```
 3. This should take a few minutes, mainly because of the --diag option. Without, the program runs faster.
@@ -556,7 +556,7 @@ srun macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.b
 
 **At this point, you should have a BED file containing the peak coordinates.**
 
-Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2017_chipseq)
+Go back to working home directory (i.e /shared/projects/eba2018_<login>/EBA2018_chipseq)
 ```bash
 ## If you are in 05-PeakCalling
 cd ..
