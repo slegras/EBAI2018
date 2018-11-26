@@ -424,8 +424,8 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 
 ### 2 - Viewing the raw alignment data in IGV
 1. Download the following files from the server onto your computer
-  * data/Escherichia_coli_K12.fasta.gz
-  * data/Escherichia_coli_K_12_MG1655.annotation.fixed.gtf.gz
+  * data/Escherichia_coli_K12.fasta
+  * data/Escherichia_coli_K_12_MG1655.annotation.fixed.bed
   * 02-Mapping/IP/SRR576933.bam
   * 02-Mapping/IP/SRR576933.bam.bai
   * 02-Mapping/Control/SRR576938.bam
@@ -433,8 +433,8 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 2. Open IGV on your computer
 3. Load the genome
   * Genomes / Load Genome from File...
-  * Select the fasta file Escherichia_coli_K12.fasta.gz located into the data directory
-4. Load an annotation file named Escherichia_coli_K_12_MG1655.annotation.fixed.gtf.gz into IGV
+  * Select the fasta file Escherichia_coli_K12.fasta located into the data directory
+4. Load an annotation file named Escherichia_coli_K_12_MG1655.annotation.fixed.bed into IGV
   * File / Load from File...
   * Select the annotation file. The positions of the genes are now loaded.
 5. Load the two bam files (SRR576933.bam and SRR576938.bam) in IGV.
@@ -448,15 +448,15 @@ However, looking at BAM file as such does not allow to directly compare the two 
 [bamCoverage](https://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html) from deepTools generates BigWigs from BAM files
 1. Try it out
 ```bash
-srun bamCoverage --help
+bamCoverage --help
 ```
 2. Create a directory named **04-Visualization** to store bamCoverage outputs
 ```bash
-mkdir 04-Visualization
+mkdir 03-Visualization
 ```
 3. Go to the newly created directory
 ```bash
-cd 04-Visualization
+cd 03-Visualization
 ```
 
 Your directory structure should be like this:
@@ -474,9 +474,7 @@ Your directory structure should be like this:
 |    └───IP
 |    └───Control
 │   
-└───03-ChIPQualityControls
-│   
-└───04-Visualization <- you should be in this folder
+└───03-Visualization <- you should be in this folder
 ```
 
 4. Generate a scaled bigwig file on the IP with bamCoverage
