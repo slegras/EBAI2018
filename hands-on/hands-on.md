@@ -317,7 +317,7 @@ Open the file SRR576938.out. How many reads were mapped?**
 
 1. Go to the directory with alignment file of treatment (IP)
 ```bash
-cd /shared/projects/training/<login>/EBA2017_chipseq/02-Mapping/IP
+cd /shared/projects/training/<login>/EBA2018_chipseq/02-Mapping/IP
 ```
 2. Run Picard markDuplicates to mark duplicated reads (= reads mapping at the exact same location on the genome)
   * CREATE_INDEX: Create .bai file for the result bam file with marked duplicate reads
