@@ -103,11 +103,10 @@ cd EBA2018_chipseq
 ```bash
 sinteractive
 ```
-6. Copy directories containing data and scripts needed for the training. WARNING : remember, we don't use qlogin on the Strasbourg server, but ` srun ` in front of each command, so that it  runs  on a computing node.
+6. Copy the directory containing data
 
 ```bash
-cp -r /shared/home/mthomaschollier/data \
-/shared/projects/training/slegras/EBA2017_chipseq/scripts/ .
+cp -r /shared/home/mthomaschollier/data .
 ```
 
 7. Your directory structure should be like this
@@ -115,8 +114,6 @@ cp -r /shared/home/mthomaschollier/data \
 /shared/projects/eba2018_<login>/EBA2018_chipseq
 │
 └───data
-│   
-└───scripts
 ```
 
 ## Quality control of the reads and statistics <a name="qc"></a>
@@ -139,8 +136,6 @@ Your directory structure should be like this
 /shared/projects/eba2018_<login>/EBA2018_chipseq
 │
 └───data
-│   
-└───scripts
 │   
 └───01-QualityControl <- you should be in this folder
 ```
@@ -259,8 +254,6 @@ Your directory structure should be like this:
 /shared/projects/eba2018_<login>/EBA2018_chipseq
 │
 └───data
-│   
-└───scripts
 │   
 └───01-QualityControl
 │   
@@ -435,8 +428,6 @@ Your directory structure should be like this:
 │
 └───data
 │   
-└───scripts
-│   
 └───01-QualityControl
 │   
 └───02-Mapping
@@ -559,8 +550,6 @@ Your directory structure should be like this:
 /shared/projects/eba2018_<login>/EBA2018_chipseq
 │
 └───data
-│   
-└───scripts
 │   
 └───01-QualityControl
 │   
