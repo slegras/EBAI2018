@@ -107,7 +107,7 @@ sinteractive
 6. Copy directories containing data and scripts needed for the training. WARNING : remember, we don't use qlogin on the Strasbourg server, but ` srun ` in front of each command, so that it  runs  on a computing node.
 
 ```bash
-cp -r /shared/projects/training/slegras/EBA2017_chipseq/data \
+cp -r /shared/home/mthomaschollier/data \
 /shared/projects/training/slegras/EBA2017_chipseq/scripts/ .
 ```
 
@@ -118,17 +118,6 @@ cp -r /shared/projects/training/slegras/EBA2017_chipseq/data \
 └───data
 │   
 └───scripts
-│   
-└───01-QualityControl
-│   
-└───02-Mapping
-|    └───index
-|    └───IP
-|    └───Control
-│   
-└───03-ChIPQualityControls
-│   
-└───04-Visualization <- you should be in this folder
 ```
 
 ## Quality control of the reads and statistics <a name="qc"></a>
@@ -182,7 +171,7 @@ mkdir ~/Desktop/EBA2017_chipseq
 cd ~/Desktop/EBA2017_chipseq
 
 ## Download the file
-scp <login>@hpc.igbmc.fr:/shared/projects/training/<login>/EBA2017_chipseq/01-QualityControl/SRR576933_fastqc.html .
+scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/eba2018_<login>/EBA2018_chipseq/01-QualityControl/SRR576933_fastqc.html .
 # Enter your password
 ```
 7. On your machine, open this file in Firefox.  
@@ -231,8 +220,8 @@ mkdir 02-Mapping
 ```bash
 cd 02-Mapping
 ```
- 
- 
+
+
 ### 3 - Prepare the index file
 1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta.gz in the course folder) (The genome was downloaded from the NCBI). Note that we will not work with the latest version (NC_000913.3) but the previous one (NC_000913.2), because the available tools for visualization have not been updated yet to the latest version. This will not affect our results.
 2. Create a directory named **index** in which to output bowtie indexes
@@ -245,18 +234,12 @@ cd index
 ```
 4. Try out bowtie-build
 ```bash
-srun bowtie-build
+bowtie-build
 ```
 5. Build the index for bowtie
 ```bash
-## Unzip genome fasta file
-srun gunzip ../../data/Escherichia_coli_K12.fasta.gz
-
 ## Creating genome index : provide the path to the genome file and the name to give to the index (Escherichia_coli_K12)
-srun bowtie-build ../../data/Escherichia_coli_K12.fasta Escherichia_coli_K12
-
-## Compress back the genome fasta file
-srun gzip ../../data/Escherichia_coli_K12.fasta
+bowtie-build ../../data/Escherichia_coli_K12.fasta Escherichia_coli_K12
 ```
 6. Go back to upper directory i.e 02-Mapping
 ```bash
