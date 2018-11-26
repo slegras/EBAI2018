@@ -341,7 +341,7 @@ samtools flagstat Marked_SRR576933.bam
 ```
 
 
-Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2017_chipseq)
+Go back to working home directory (i.e /shared/projects/training/<login>/EBA2018_chipseq/)
 ```bash
 ## If you are in 02-Mapping/IP
 cd ../..
@@ -363,7 +363,7 @@ cd 03-ChIPQualityControls
   * -b: List of indexed BAM files
   * -plot: File name of the output figure (extension can be either “png”, “eps”, “pdf” or “svg”)
 ```bash
-srun plotFingerprint -b ../02-Mapping/IP/SRR576933.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
+plotFingerprint -b ../02-Mapping/IP/SRR576933.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
 ```
 4. Download the file fingerprint.png on your local machine (either with ` scp ` or Cyberduck). Using ` scp ` it would look like this.
 ```bash
@@ -372,7 +372,7 @@ srun plotFingerprint -b ../02-Mapping/IP/SRR576933.bam ../02-Mapping/Control/SRR
 cd ~/Desktop/EBA2017_chipseq
 
 ## Download the file
-scp <login>@hpc.igbmc.fr:/shared/projects/training/<login>/EBA2017_chipseq/03-ChIPQualityControls/fingerprint.png .
+scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<login>/EBA2018_chipseq/03-ChIPQualityControls/fingerprint.png .
 # Enter your password
 ```
 
