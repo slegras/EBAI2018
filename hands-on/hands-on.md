@@ -486,7 +486,7 @@ cd ..
 **Goal**: Define the peaks, i.e. the region with a high density of reads, where the studied factor was bound
 
 ### 1 - Choosing a peak-calling program
-There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use MACS version 1.4.2 because it's known to produce generally good results, and it is well-maintained by the developer. A new version (MACS2) is being developed, but still in testing phase so we will not use it today.
+There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use MACS version 1.4.2 because it's known to produce generally good results, and it is well-maintained by the developer. A new version (MACS2) is available.
 
 ### 2 - Calling the peaks
 1. Create a directory named **05-PeakCalling** to store annotatePeaks outputs
