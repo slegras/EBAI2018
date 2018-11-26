@@ -74,7 +74,7 @@ The downloaded FASTQ file is available in the data folder (SRR576938.fastq.gz)
 ### 1 - Sign in on the server
   * On MobaXterm
 > Session : ssh  
-> Host : hpc.igbmc.fr  
+> Host : core.cluster.france-bioinformatique.fr
 > Specify username : ticked and filled in  
 > Advanced SSH settings : X11-Forwarding  
   * On MacOS and Linux
@@ -85,19 +85,20 @@ ssh -XY <login>@core.cluster.france-bioinformatique.fr
 ### 2 - Set up your working environment
 1. Go to your working directory
 ```bash
-cd /shared/projects/training/<login>/
+cd /shared/projects/eba2018_<login>
 ```
 2. Load the conda virtual environment which contains all bioinformatics tools used to analyze ChIP-seq data.
 ```bash
-source activate eba2017_chipseq
+module load conda
+source activate eba2018_chipseq
 ```
 3. Create a directory that will contain all results of the upcoming analyses.
 ```bash
-mkdir EBA2017_chipseq
+mkdir EBA2018_chipseq
 ```
 4. Go to the newly created directory
 ```bash
-cd EBA2017_chipseq
+cd EBA2018_chipseq
 ```
 5. Copy directories containing data and scripts needed for the training. WARNING : remember, we don't use qlogin on the Strasbourg server, but ` srun ` in front of each command, so that it  runs  on a computing node.
 
