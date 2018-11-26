@@ -79,7 +79,7 @@ The downloaded FASTQ file is available in the data folder (SRR576938.fastq.gz)
 > Advanced SSH settings : X11-Forwarding  
   * On MacOS and Linux
 ```bash
-ssh -XY <login>@hpc.igbmc.fr
+ssh -XY <login>@core.cluster.france-bioinformatique.fr
 ```
 
 ### 2 - Set up your working environment
@@ -569,11 +569,11 @@ srun annotatePeaks.pl
 Let's see the parameters:
 
 annotatePeaks.pl peak/BEDfile genome > outputfile
-	
+
 	User defined annotation files (default is UCSC refGene annotation):annotatePeaks.pl accepts GTF (gene transfer formatted) files to annotate positions relative
 		to custom annotations, such as those from de novo transcript discovery or Gencode.
 
-		
+
 		-gtf <gtf format file> (Use -gff and -gff3 if appropriate, but GTF is better)
 
 4. Annotation peaks with nearby genes with Homer
@@ -735,11 +735,11 @@ Your directory structure should be like this:
 │   
 └───03-ChIPQualityControls
 │   
-└───04-Visualization 
+└───04-Visualization
 │   
-└───05-PeakCalling 
+└───05-PeakCalling
 │   
-└───06-PeakAnnotation 
+└───06-PeakAnnotation
 │   
 └───07-MotifAnalysis <- you should be in this folder
 ```
@@ -789,7 +789,7 @@ and setting the title box to **FNR Anaerobic A summit +/-100bp**
 
 ## Annotation of ChIP-peaks using R tools <a name="peakr"></a>
 
-In this part, we will use a different set of peaks obtained using a peak caller from a set of p300 ChIP-seq experiments in different mouse embryonic tissues (nirdbrain, forebrain and limb). 
+In this part, we will use a different set of peaks obtained using a peak caller from a set of p300 ChIP-seq experiments in different mouse embryonic tissues (nirdbrain, forebrain and limb).
 
 ### 1 - Obtain the bed files from GEO
 
@@ -809,8 +809,8 @@ mkdir 08-mousePeaks
 Now, we will use **RStudio** to perform the rest of the analysis in R. For the analysis, we will need to install some R libraries, in particular [ChIPSeeker](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html)
 
 1. Open your **RStudio** tool
-2. Install 
-   * [ChIPSeeker](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html) 
+2. Install
+   * [ChIPSeeker](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html)
    * [mouse gene annotation](http://bioconductor.org/packages/release/data/annotation/html/TxDb.Mmusculus.UCSC.mm9.knownGene.html)
    * [mouse functional annotation](http://bioconductor.org/packages/release/data/annotation/html/org.Mm.eg.db.html)
    * [clusterProfiler: Gene set annotation tool](http://bioconductor.org/packages/release/bioc/html/clusterProfiler.html)
@@ -933,9 +933,9 @@ plotAnnoBar(list(forebrain=peakAnno.forebrain, midbrain=peakAnno.midbrain,limb=p
 *Question: do you see differences between the three peak sets?*
 
 
-#### functional annotation 
+#### functional annotation
 
-An important step in ChIP-seq analysis is to interpret genes that are located close to the ChIP peaks. Hence, we need to 
+An important step in ChIP-seq analysis is to interpret genes that are located close to the ChIP peaks. Hence, we need to
 1. assign genes to peaks
 2. compute functional enrichments of the target genes.
 
@@ -961,7 +961,7 @@ ego.forebrain = enrichGO(gene          = genes.forebrain,
                 pvalueCutoff  = 0.01,
                 qvalueCutoff  = 0.05,
         readable      = TRUE)
-        
+
 # display the results as barplots        
 barplot(ego.forebrain,showCategory=10)
 ```
