@@ -334,7 +334,7 @@ METRICS_FILE=metrics \
 VALIDATION_STRINGENCY=STRICT
 ```
 
-To determine the number of duplicated reads marked by Picard, we can run the `samtools flagstat command`:
+To determine the number of duplicated reads marked by Picard, we can run the `samtools flagstat` command:
 
 ```bash
 samtools flagstat Marked_SRR576933.bam
