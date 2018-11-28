@@ -670,9 +670,9 @@ col = brewer.pal(9,'Set1')
 setwd(<directory containing the peak files>)
 
 # read the peaks for each dataset
-peaks.forebrain = readPeakFile('GSM348064_p300_peaks.txt')
-peaks.midbrain = readPeakFile('GSM348065_p300_peaks.txt')
-peaks.limb = readPeakFile('GSM348066_p300_peaks.txt')
+peaks.forebrain = readPeakFile('GSM348064_p300_peaks.txt.gz')
+peaks.midbrain = readPeakFile('GSM348065_p300_peaks.txt.gz')
+peaks.limb = readPeakFile('GSM348066_p300_peaks.txt.gz')
 
 # create a list containing all the peak sets
 all.peaks = list(forebrain=peaks.forebrain,
