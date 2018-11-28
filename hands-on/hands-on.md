@@ -616,8 +616,8 @@ In this part, we will use a different set of peaks obtained using a peak caller 
 
 From now on, we will work locally on your personal machine.
 
-We will download the already called peak files in bed format from GEO.
-0. Create a new folder for this analysis on **your** machine
+0. We will download the already called peak files in bed format from GEO.
+Create a new folder for this analysis on **your** machine
 ```bash
 cd ~/Desktop/EBA2018_chipseq
 mkdir PeakAnnotation
@@ -626,6 +626,11 @@ cd PeakAnnotation
 1. Search for the dataset **GSE13845** either using Google or from the front page of [GEO](https://www.ncbi.nlm.nih.gov/geo/)
 2. On the description page, find the three GSM files, and click on each of then
 3. On each page, select and download the `GSMxxxxx_p300_peaks.txt.gz` file to the newly created folder (where `xxxxx` represents the GSM number)
+You should now have downloaded 3 files:
+> GSM348064_p300_peaks.txt.gz  (Forebrain)
+> GSM348065_p300_peaks.txt.gz  (Midbrain)
+> GSM348066_p300_peaks.txt.gz  (limb)
+
 
 *Beware: Make sure to check which genome version was used to call the peaks (remember: this is mouse data!)*
 
