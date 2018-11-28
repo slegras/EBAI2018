@@ -654,7 +654,7 @@ install.packages('RColorBrewer')
 ```r
 # load the required libraries
 library(RColorBrewer)
-library(ChIPSeeker)
+library(ChIPseeker)
 library(TxDb.Mmusculus.UCSC.mm9.knownGene)
 library(org.Mm.eg.db)
 # define the annotation of the mouse genome
