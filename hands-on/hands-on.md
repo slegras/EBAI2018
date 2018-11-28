@@ -579,7 +579,7 @@ bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
 
 ### 2 - Motif discovery with RSAT
 1. Open a connection to a Regulatory Sequence Analysis Tools server. You can choose between various website mirrors.
-  * Server at Roscoff (recommended for this training) [rsat.sb-roscoff.fr](http://rsat.sb-roscoff.fr)
+  * Teaching Server  (recommended for this training) [http://pedagogix-tagc.univ-mrs.fr/rsat/](http://pedagogix-tagc.univ-mrs.fr/rsat/)
   * Main server (currently in Brussels) www.rsat.eu
 2. In the left menu, click on **NGS ChIP-seq** and then click on **peak-motifs**. A new page opens, with a form
 3. The default peak-motifs web form only displays the essential options. There are only two mandatory parameters.
