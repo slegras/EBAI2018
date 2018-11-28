@@ -610,14 +610,18 @@ and setting the title box to **FNR Anaerobic A summit +/-100bp**
 
 ## Annotation of ChIP-peaks using R tools <a name="peakr"></a>
 
-In this part, we will use a different set of peaks obtained using a peak caller from a set of p300 ChIP-seq experiments in different mouse embryonic tissues (nirdbrain, forebrain and limb).
+In this part, we will use a different set of peaks obtained using a peak caller from a set of p300 ChIP-seq experiments in different mouse embryonic tissues (midbrain, forebrain and limb).
 
 ### 1 - Obtain the bed files from GEO
 
+From now on, we will work locally on your personal machine.
+
 We will download the already called peak files in bed format from GEO.
-0. Create a new folder for this analysis
+0. Create a new folder for this analysis on **your** machine
 ```bash
-mkdir 08-mousePeaks
+cd ~/Desktop/EBA2018_chipseq
+mkdir PeakAnnotation
+cd PeakAnnotation
 ```
 1. Search for the dataset **GSE13845** either using Google or from the front page of [GEO](https://www.ncbi.nlm.nih.gov/geo/)
 2. On the description page, find the three GSM files, and click on each of then
