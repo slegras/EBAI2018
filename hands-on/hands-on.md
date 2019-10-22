@@ -1,4 +1,4 @@
-# ChIP-seq Hands-on Roscoff 2018
+# ChIP-seq Hands-on Roscoff 2019
 
 
 1. [Introduction](#introduction)  
@@ -84,20 +84,20 @@ ssh -XY <login>@core.cluster.france-bioinformatique.fr
 ### 2 - Set up your working environment
 1. Go to your working directory
 ```bash
-cd /shared/projects/eba2018_<login>
+cd /shared/projects/eba2019_<login>
 ```
 2. Load the conda virtual environment which contains all bioinformatics tools used to analyze ChIP-seq data.
 ```bash
 module load conda
-source activate eba2018_chipseq
+source activate eba2019_chipseq
 ```
 3. Create a directory that will contain all results of the upcoming analyses.
 ```bash
-mkdir EBA2018_chipseq
+mkdir EBA2019_chipseq
 ```
 4. Go to the newly created directory
 ```bash
-cd EBA2018_chipseq
+cd EBA2019_chipseq
 ```
 5. Start an interactive session
 ```bash
@@ -111,7 +111,7 @@ cp -r /shared/home/mthomaschollier/data .
 
 7. Your directory structure should be like this
  ```
-/shared/projects/eba2018_<login>/EBA2018_chipseq
+/shared/projects/eba2019_<login>/EBA2019_chipseq
 │
 └───data
 ```
@@ -133,7 +133,7 @@ cd 01-QualityControl
 
 Your directory structure should be like this
  ```
-/shared/projects/eba2018_<login>/EBA2018_chipseq
+/shared/projects/eba2019_<login>/EBA2019_chipseq
 │
 └───data
 │   
@@ -159,13 +159,13 @@ ls
 ```bash
 ### OPEN A NEW TERMINAL
 ## Create a directory where to put generated files on your computer
-mkdir ~/Desktop/EBA2018_chipseq
+mkdir ~/Desktop/EBA2019_chipseq
 
 ## Go to the location on your computer, where you want to put the data, for example:
-cd ~/Desktop/EBA2018_chipseq
+cd ~/Desktop/EBA2019_chipseq
 
 ## Download the file
-scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/eba2018_<login>/EBA2018_chipseq/01-QualityControl/SRR576933_fastqc.html .
+scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/eba2019_<login>/EBA2019_chipseq/01-QualityControl/SRR576933_fastqc.html .
 # Enter your password
 ```
 7. On your machine, open this file in Firefox.  
@@ -251,7 +251,7 @@ cd IP
 ```
 Your directory structure should be like this:
 ```
-/shared/projects/eba2018_<login>/EBA2018_chipseq
+/shared/projects/eba2019_<login>/EBA2019_chipseq
 │
 └───data
 │   
@@ -309,7 +309,7 @@ Open the file SRR576938.out. How many reads were mapped?**
 
 1. Go to the directory with alignment file of treatment (IP)
 ```bash
-cd /shared/projects/training/<login>/EBA2018_chipseq/02-Mapping/IP
+cd /shared/projects/training/<login>/EBA2019_chipseq/02-Mapping/IP
 ```
 2. Run Picard markDuplicates to mark duplicated reads (= reads mapping at the exact same location on the genome)
   * CREATE_INDEX: Create .bai file for the result bam file with marked duplicate reads
@@ -333,7 +333,7 @@ samtools flagstat Marked_SRR576933.bam
 ```
 
 
-Go back to working home directory (i.e /shared/projects/training/<login>/EBA2018_chipseq/)
+Go back to working home directory (i.e /shared/projects/training/<login>/EBA2019_chipseq/)
 ```bash
 ## If you are in 02-Mapping/IP
 cd ../..
@@ -362,17 +362,17 @@ plotFingerprint -b ../02-Mapping/IP/SRR576933.bam ../02-Mapping/Control/SRR57693
 ```bash
 ### OPEN A NEW TERMINAL
 ## Go to the location on your computer, where you want to put the data
-cd ~/Desktop/EBA2018_chipseq
+cd ~/Desktop/EBA2019_chipseq
 
 ## Download the file
-scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<login>/EBA2018_chipseq/03-ChIPQualityControls/fingerprint.png .
+scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<login>/EBA2019_chipseq/03-ChIPQualityControls/fingerprint.png .
 # Enter your password
 ```
 
 **Look at the result files fingerprint.png. What do you think of it?**  
 
 
-Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2018_chipseq)
+Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2019_chipseq)
 ```bash
 ## If you are in 03-ChIPQualityControls
 cd ..
@@ -424,7 +424,7 @@ cd 04-Visualization
 
 Your directory structure should be like this:
 ```
-/shared/projects/eba2018_<login>/EBA2018_chipseq
+/shared/projects/eba2019_<login>/EBA2019_chipseq
 │
 └───data
 │   
@@ -467,7 +467,7 @@ bamCoverage --bam ../02-Mapping/IP/Marked_SRR576933.bam \
 **Go back to the genes we looked at earlier: b1127, b1108. Look at the shape of the signal.**  
 **Keep IGV opened.**
 
-Go back to working home directory (i.e /shared/projects/eba2018_<login>/EBA2018_chipseq)
+Go back to working home directory (i.e /shared/projects/eba2019_<login>/EBA2019_chipseq)
 ```bash
 ## If you are in 04-Visualization
 cd ..
@@ -517,7 +517,7 @@ macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.bam --
 
 **At this point, you should have a BED file containing the peak coordinates.**
 
-Go back to working home directory (i.e /shared/projects/eba2018_<login>/EBA2018_chipseq)
+Go back to working home directory (i.e /shared/projects/eba2019_<login>/EBA2019_chipseq)
 ```bash
 ## If you are in 05-PeakCalling
 cd ..
@@ -547,7 +547,7 @@ cd 06-MotifAnalysis
 
 Your directory structure should be like this:
 ```
-/shared/projects/eba2018_<login>/EBA2018_chipseq
+/shared/projects/eba2019_<login>/EBA2019_chipseq
 │
 └───data
 │   
@@ -619,7 +619,7 @@ From now on, we will work locally on your personal machine.
 0. We will download the already called peak files in bed format from GEO.
 Create a new folder for this analysis on **your** machine
 ```bash
-cd ~/Desktop/EBA2018_chipseq
+cd ~/Desktop/EBA2019_chipseq
 mkdir PeakAnnotation
 cd PeakAnnotation
 ```
