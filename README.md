@@ -5,7 +5,7 @@ Go to [hands-on](/hands-on/hands-on.md)
 
 ### Planning
 
-#### Thuesday
+#### Tuesday
 | **Start** | **End** | **Duration** | **Topics** | **Teacher** |
 | -------- | --------- | --------- | ----------- | ----------- |
 | 10:45 | 12:25 | 02:00 | Experimental design, Quality Controls, Mapping |  |
