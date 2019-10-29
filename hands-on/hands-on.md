@@ -107,9 +107,9 @@ cp -r /shared/home/mthomaschollier/data .
 ```
 
 ## Quality control of the reads and statistics <a name="qc"></a>
-**Goal**: Get some basic information on the data (read length, number of reads, global quality of dataset)  
+**Goal**: Get some basic information on the data (read length, number of reads, global quality of datasets)  
 
-### 1 - Getting the FASTQC report
+### 1 - Generating the FASTQC report
 Before you analyze the data, it is crucial to check the quality of the data. We will use the standard tool for checking the quality of data generated on the Illumina platform: [FASTQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/).
 
 1. Create a directory named **01-QualityControl** in which to output results from fastqc
@@ -123,29 +123,33 @@ cd 01-QualityControl
 
 Your directory structure should be like this
  ```
-/shared/projects/eba2019_<login>/EBA2019_chipseq
+/shared/projects/<your_project>/EBA2019_chipseq
 │
 └───data
 │   
 └───01-QualityControl <- you should be in this folder
 ```
-3. Check the help page of the program to see its usage and parameters.
+3. Get FastQC available in your environment
+```bash
+module add fastqc/0.11.8
+```
+4. Check the help page of the program to see its usage and parameters.
 
 ```bash
-fastqc --help
+srun fastqc --help
 ```
-4. Launch the FASTQC program on the experiment file (SRR576933.fastq.gz)
+5. Launch the FASTQC program on the experiment file (SRR576933.fastq.gz)
   * -o: creates all output files in the specified output directory. '.' means current directory.
 ```bash
-fastqc ../data/SRR576933.fastq.gz -o .
+srun fastqc ../data/SRR576933.fastq.gz -o .
 ```  
-5. Wait until the analysis is finished. Check the files output by the program.
+6. Wait until the analysis is finished. Check the FastQC result files.
 ```bash
 ls
 ```
 > SRR576933_fastqc.html  SRR576933_fastqc.zip
 
-6. Download the HTML file SRR576933_fastqc.html on your local machine (either with ssh or the program you used to upload your data on the server). Using a bash command it would look like this.
+7. Download the HTML file SRR576933_fastqc.html on your local machine (either with ssh or the program you used to upload your data on the server). Using a bash command it would look like this.
 ```bash
 ### OPEN A NEW TERMINAL
 ## Create a directory where to put generated files on your computer
@@ -155,11 +159,11 @@ mkdir ~/Desktop/EBA2019_chipseq
 cd ~/Desktop/EBA2019_chipseq
 
 ## Download the file
-scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/eba2019_<login>/EBA2019_chipseq/01-QualityControl/SRR576933_fastqc.html .
+scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/<your_project>/EBA2019_chipseq/01-QualityControl/SRR576933_fastqc.html .
 # Enter your password
 ```
-7. On your machine, open this file in Firefox.  
-8. Launch the FASTQC program on the control file (SRR576938.fastq)
+8. On your machine, open this file with your favourite web browser.  
+9. Launch the FASTQC program on the control file (SRR576938.fastq)
 
 **Analyze the result of the FASTQC program:  
 How many reads are present in the file ?  
@@ -167,8 +171,12 @@ What is the read length ?
 Is the overall quality good ?  
 Are there any concerns raised by the report ? If so, can you tell where the problem might come from ?**  
 
+10. Once you are done with FastQC, unload it
+```bash
+module rm fastqc/0.11.8
+```
 
-### 2 - Organism length
+<!-- ### 2 - Organism length
 Knowing your organism size is important to evaluate if your dataset has sufficient coverage to continue your analyses. For the human genome (3 Gb), we usually aim at least 10 Million reads.
 
 1. Go to the [NCBI Genome](http://www.ncbi.nlm.nih.gov/genome) website, and search for the organism **Escherichia coli**
@@ -178,10 +186,10 @@ Knowing your organism size is important to evaluate if your dataset has sufficie
 **How long is the genome ?  
 Do both FASTQ files contain enough reads for a proper analysis ?**
 
-**At this point, you should be confident about the quality of the datasets, and whether it's worth following with analyzing the datasets.**
+**At this point, you should be confident about the quality of the datasets, and whether it's worth following with analyzing the datasets.** -->
 
 ## Mapping the reads with Bowtie <a name="mapping"></a>
-**Goal**: Obtain the coordinates of each read on the reference genome.  
+**Goal**: Obtain the coordinates of each read to the reference genome.  
 
 ### 1 - Choosing a mapping program
 There are multiple programs to perform the mapping step. For reads produced by an Illumina machine for ChIP-seq, the currently "standard" programs are BWA and Bowtie (versions 1 and 2), and STAR is getting popular. We will use **Bowtie version 1.2.1.1** (Langmead B et al., Genome Biol, 2009) for this exercise, as this program remains effective for short reads (< 50bp).
@@ -241,7 +249,7 @@ cd IP
 ```
 Your directory structure should be like this:
 ```
-/shared/projects/eba2019_<login>/EBA2019_chipseq
+/shared/projects/<your_project>/EBA2019_chipseq
 │
 └───data
 │   
@@ -414,7 +422,7 @@ cd 04-Visualization
 
 Your directory structure should be like this:
 ```
-/shared/projects/eba2019_<login>/EBA2019_chipseq
+/shared/projects/<your_project>/EBA2019_chipseq
 │
 └───data
 │   
@@ -457,7 +465,7 @@ bamCoverage --bam ../02-Mapping/IP/Marked_SRR576933.bam \
 **Go back to the genes we looked at earlier: b1127, b1108. Look at the shape of the signal.**  
 **Keep IGV opened.**
 
-Go back to working home directory (i.e /shared/projects/eba2019_<login>/EBA2019_chipseq)
+Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
 ```bash
 ## If you are in 04-Visualization
 cd ..
@@ -507,7 +515,7 @@ macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.bam --
 
 **At this point, you should have a BED file containing the peak coordinates.**
 
-Go back to working home directory (i.e /shared/projects/eba2019_<login>/EBA2019_chipseq)
+Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
 ```bash
 ## If you are in 05-PeakCalling
 cd ..
@@ -537,7 +545,7 @@ cd 06-MotifAnalysis
 
 Your directory structure should be like this:
 ```
-/shared/projects/eba2019_<login>/EBA2019_chipseq
+/shared/projects/<your_project>/EBA2019_chipseq
 │
 └───data
 │   
