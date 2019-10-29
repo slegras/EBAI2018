@@ -192,27 +192,30 @@ Do both FASTQ files contain enough reads for a proper analysis ?**
 **Goal**: Obtain the coordinates of each read to the reference genome.  
 
 ### 1 - Choosing a mapping program
-There are multiple programs to perform the mapping step. For reads produced by an Illumina machine for ChIP-seq, the currently "standard" programs are BWA and Bowtie (versions 1 and 2), and STAR is getting popular. We will use **Bowtie version 1.2.1.1** (Langmead B et al., Genome Biol, 2009) for this exercise, as this program remains effective for short reads (< 50bp).
+There are multiple programs to perform the mapping step. For reads produced by an Illumina machine for ChIP-seq, the currently "standard" programs are BWA (Li and Durbin, 2009) and Bowtie (versions 1 and 2)(Langmead et al., 2009; Langmead and Salzberg, 2012), and STAR (Dobin et al., 2013) is getting popular. We will use **Bowtie version 1.2.1.1** for this exercise, as this program remains effective for short reads (< 50bp).
 
 ### 2 - Bowtie
-1. Try out bowtie
+1. Load Bowtie
 ```bash
-bowtie
+module add bowtie/1.2.2
 ```
-This prints the help of the program. However, this is a bit difficult to read ! If you need to know more about the program, it's easier to directly check the manual on the [website](http://bowtie-bio.sourceforge.net/manual.shtml).
+2. Try out bowtie
+```bash
+srun bowtie
+```
+This prints the help of the program. However, this is a bit difficult to read ! If you need to know more about the program, it's easier to directly check out the manual on the [website](http://bowtie-bio.sourceforge.net/manual.shtml).
 
-2. bowtie needs the reference genome to align each read on it. This genome needs to be in a specific format (=index) for bowtie to be able to use it. Several pre-built indexes are available for download on the bowtie webpage, but our genome is not there. You will need to make this index file.
+3. bowtie needs the reference genome to align each read on it. This genome needs to be in a specific format (=index) for bowtie to be able to use it. Several pre-built indexes are available for download on bowtie webpage, but our genome is not there. You will need to make this index file.
 
-3. Create a directory named **02-Mapping** in which to output mapping results
+4. Create a directory named **02-Mapping** in which to output mapping results
 ```bash
 cd ..
 mkdir 02-Mapping
 ```
-4. Go to the directory you've just created
+5. Go to the directory you've just created
 ```bash
 cd 02-Mapping
 ```
-
 
 ### 3 - Prepare the index file
 1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta in the course folder) (The genome was downloaded from the NCBI). Note that we will not work with the latest version (NC_000913.3) but the previous one (NC_000913.2), because the available tools for visualization have not been updated yet to the latest version. This will not affect our results.
@@ -238,14 +241,16 @@ bowtie-build ../../data/Escherichia_coli_K12.fasta Escherichia_coli_K12
 cd ..
 ```
 
-### 4 - Mapping the experiment
-1. Create a directory named **IP** in which to put mapping results for IP
+### 4 - Mapping the IP samples
+1. Create a directory named **IP** and two directories named **repA** and **repB** within to put mapping results for IP
 ```bash
 mkdir IP
+mkdir IP/repA
+mkdir IP/repB
 ```
-2. Go to the newly created directory
+2. Go to the newly created directory for replicate A
 ```bash
-cd IP
+cd IP/repA
 ```
 Your directory structure should be like this:
 ```
@@ -258,8 +263,11 @@ Your directory structure should be like this:
 └───02-Mapping
 |    └───index
 |    └───IP
+│       ├── repA <- you should be here
+│       ├── repB
 ```
 
+<- CHECKED UNTIL THERE
 
 3. Let's see the parameters of bowtie before launching the mapping:
   * Escherichia_coli_K12 is the name of our genome index file
@@ -833,3 +841,8 @@ This file will work directly in IGV
 [ebi4]: https://github.com/slegras/EBAI2017/blob/master/images/4_EBI.png "EBI"
 [ebi5]: https://github.com/slegras/EBAI2017/blob/master/images/5_EBI.png "EBI"
 [genome6]: https://github.com/slegras/EBAI2017/blob/master/images/6_Genomes.png "E. Coli K-12"
+
+Dobin, A., Davis, C.A., Schlesinger, F., Drenkow, J., Zaleski, C., Jha, S., Batut, P., Chaisson, M., and Gingeras, T.R. (2013). STAR: ultrafast universal RNA-seq aligner. Bioinformatics 29, 15–21.
+Langmead, B., and Salzberg, S.L. (2012). Fast gapped-read alignment with Bowtie 2. Nat. Methods 9, 357–359.
+Langmead, B., Trapnell, C., Pop, M., and Salzberg, S.L. (2009). Ultrafast and memory-efficient alignment of short DNA sequences to the human genome. Genome Biol. 10, R25.
+Li, H., and Durbin, R. (2009). Fast and accurate short read alignment with Burrows–Wheeler transform. Bioinformatics 25, 1754–1760.
