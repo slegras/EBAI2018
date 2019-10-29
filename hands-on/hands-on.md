@@ -20,36 +20,36 @@
 ## Introduction <a name="introduction"></a>
 ### Goal
 The aim is to :
-  * have an understanding of the nature of ChIP-Seq data
+  * understand the nature of ChIP-Seq data
   * perform a complete analysis workflow including quality check (QC), read mapping, visualization in a genome browser and peak-calling. Use command line and open source software for each step of the workflow and feel the complexity of the task
-  * have an overview of possible downstream analyses
+  * have an overview of some possible downstream analyses
   * perform a motif analysis with online web programs
 
 ### Summary
-This training gives an introduction to ChIP-seq data analysis, covering the processing steps starting from the reads to the peaks. Among all possible downstream analyses, the practical aspect will focus on motif analyses. A particular emphasis will be put on deciding which downstream analyses to perform depending on the biological question. This training does not cover all methods available today. It does not aim at bringing users to a professional NGS analyst level but provides enough information to allow biologists understand what DNA sequencing practically is and to communicate with NGS experts for more in-depth needs.
+This training gives an introduction to ChIP-seq data analysis, covering the processing steps starting from the reads to the peaks. Among all possible downstream analyses, the practical aspect will focus on motif analyses. A particular emphasis will be put on deciding which downstream analyses to perform depending on the biological question. This training does not cover all methods available today. It does not aim at bringing users to a professional NGS analyst level but provides enough information to allow biologists understand what is DNA sequencing in practice and to communicate with NGS experts for more in-depth needs.
 
 ### Dataset description
 For this training, we will use two datasets:
 * a dataset produced by Myers et al [Pubmed](http://www.ncbi.nlm.nih.gov/pubmed/23818864) involved in the regulation of gene expression under anaerobic conditions in bacteria. We will focus on one factor: **FNR**. The advantage of this dataset is its small size, allowing real time execution of all steps of the dataset
-* a dataset of ChIP-seq peaks obtained in different mouse tissues for the p300 co-activator protein by Visel et al. [Pubmed](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2745234/); we will use this dataset to illustrate downstream annotation of peaks using R tools.
+* a dataset of ChIP-seq peaks obtained in different mouse tissues for the p300 co-activator protein by Visel et al. [Pubmed](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2745234/); we will use this dataset to illustrate downstream annotation of peaks using R.
 
 ## Downloading ChIP-seq reads from NCBI <a name="download"></a>
-**Goal**: Identify the dataset corresponding to the studied article and retrieve the data (reads as FASTQ file) corresponding to one experiment and the control.  
+**Goal**: Identify the datasets corresponding to the studied article and retrieve the data (reads as FASTQ files) corresponding to 2 replicates of a condition and the corresponding control.
 
 ### 1 - Obtaining an identifier for a chosen dataset
-Within an article of interest, search for a sentence mentioning the deposition of the data in a database. Here, the following sentence can be found at the end of the Materials and Methods section:
-*"All genome-wide data from this publication have been deposited in NCBI’s Gene Expression Omnibus (**GSE41195**)."*
-We will thus use the **GSE41195** identifier to retrieve the dataset from the **NCBI GEO** (Gene Expression Omnibus) database.
-
 NGS datasets are (usually) made freely accessible for other scientists, by depositing these datasets into specialized databanks. [Sequence Read Archive (SRA)](http://www.ncbi.nlm.nih.gov/sra) located in USA hosted by NCBI, and its European equivalent [European Nucleotide Archive (ENA)](http://www.ebi.ac.uk/ena) located in England hosted by EBI both contains **raw reads**.
 
 Functional genomic datasets (transcriptomics, genome-wide binding such as ChIP-seq,...) are deposited in the databases [Gene Expression Omnibus (GEO)](http://www.ncbi.nlm.nih.gov/geo/) or its European equivalent [ArrayExpress](https://www.ebi.ac.uk/arrayexpress/).
 
+Within an article of interest, search for a sentence mentioning the deposition of the data in a database. Here, the following sentence can be found at the end of the Materials and Methods section:
+*"All genome-wide data from this publication have been deposited in NCBI’s Gene Expression Omnibus (**GSE41195**)."*
+We will thus use the **GSE41195** identifier to retrieve the dataset from the **NCBI GEO** (Gene Expression Omnibus) database.
+
 ### 2 - Accessing GSE41195 from GEO
-1.  The GEO database hosts processed data files and many details related to the experiments. The SRA (Sequence Read Archive) stores the actual raw sequence data.
+1.  The GEO database hosts processed data files and many details related to the experiments. SRA (Sequence Read Archive) stores the actual raw sequence data.
 2. Search in Google **GSE41195**. Click on the first link to directly access the correct page on the GEO database.
 ![alt text][geo]
-3. This GEO entry is a mixture of expression analysis and chip-seq. At the bottom of the page, click on the subseries related to the chip-seq datasets. (this subseries has its own identifier: **GSE41187**).
+3. This GEO entry is a mixture of expression analysis (Nimblegen Gene Expression Array), chip-chip and chip-seq. At the bottom of the page, click on the subseries related to the chip-seq datasets. (this subseries has its own identifier: **GSE41187**).
 ![alt text][geo2]
 4. From this page, we will focus on the experiment **FNR IP ChIP-seq Anaerobic A**. At the bottom of the page, click on the link "**GSM1010219** - FNR IP ChIP-seq Anaerobic A".
 5. In the new page, go to the bottom to find the SRA identifier. This is the identifier of the raw dataset stored in the SRA database.  
@@ -57,17 +57,16 @@ Functional genomic datasets (transcriptomics, genome-wide binding such as ChIP-s
 6. Copy the identifier **SRX189773** (do not click on the link that would take you to the SRA database, see below why)
 
 ### 3 - Downloading FASTQ file from the ENA database
-Although direct access to the SRA database at the NCBI is doable, SRA does not store the sequence FASTQ format. In practice, it's simpler (and quicker!!) to download datasets from the ENA database (European Nucleotide Archive) hosted by EBI (European Bioinformatics Institute) in UK. ENA encompasses the data from SRA.
+Although direct access to the SRA database at the NCBI is doable, SRA does not store sequences in a FASTQ format. So, in practice, it's simpler (and quicker!!) to download datasets from the ENA database (European Nucleotide Archive) hosted by EBI (European Bioinformatics Institute) in UK. ENA encompasses the data from SRA.
 
 1. Go to the [EBI](http://www.ebi.ac.uk/) website. Paste your SRA identifier (SRX189773) and click on the button "search".
 ![alt text][ebi4]
 2. Click on the first result. On the next page, there is a link to the FASTQ file. For efficiency, this file has already been downloaded and is available in the "data" folder (SRR576933.fastq.gz)  
 ![alt text][ebi5]
 
-**tip**: To download the control dataset, we should redo the same steps starting from the GEO web page specific to the chip-seq datasets (see step 2.4) and choose **anaerobic INPUT DNA**.  
-The downloaded FASTQ file is available in the data folder (SRR576938.fastq.gz)
+**tip**: To download the replicate and control datasets, we should redo the same steps starting from the GEO web page specific to the chip-seq datasets (see step 2.4) and choose **FNR IP ChIP-seq Anaerobic B** and **anaerobic INPUT DNA**. Downloaded FASTQ files are available in the data folder (SRR576934.fastq.gz and SRR576938.fastq.gz respectively)
 
-**At this point, you have two FASTQ files, one for the experiment, one for the control.**
+**At this point, you have three FASTQ files, two IPs, one control (INPUT).**
 
 ## Connect to the server and set up your environment <a name="setup"></a>
 ### 1 - Sign in on the server
@@ -82,28 +81,19 @@ ssh -XY <login>@core.cluster.france-bioinformatique.fr
 ```
 
 ### 2 - Set up your working environment
-1. Go to your working directory
+1. Go to your project directory
 ```bash
-cd /shared/projects/eba2019_<login>
+cd /shared/projects/<your_project>
 ```
-2. Load the conda virtual environment which contains all bioinformatics tools used to analyze ChIP-seq data.
-```bash
-module load conda
-source activate eba2019_chipseq
-```
-3. Create a directory that will contain all results of the upcoming analyses.
+2. Create a directory that will contain all results of the upcoming analyses.
 ```bash
 mkdir EBA2019_chipseq
 ```
-4. Go to the newly created directory
+3. Go to the newly created directory
 ```bash
 cd EBA2019_chipseq
 ```
-5. Start an interactive session
-```bash
-sinteractive
-```
-6. Copy the directory containing data
+4. Copy the directory containing data <- NEED EDIT
 
 ```bash
 cp -r /shared/home/mthomaschollier/data .
@@ -111,7 +101,7 @@ cp -r /shared/home/mthomaschollier/data .
 
 7. Your directory structure should be like this
  ```
-/shared/projects/eba2019_<login>/EBA2019_chipseq
+/shared/projects/<your_project>/EBA2019_chipseq
 │
 └───data
 ```
