@@ -419,7 +419,7 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 ### 2 - Viewing the raw alignment data in IGV
 1. Download the following files from the server onto your computer
   * data/Escherichia_coli_K12.fasta
-  * data/Escherichia_coli_K_12_MG1655.annotation.fixed.bed
+  * data/Escherichia_coli_K12_MG1655.annotation.gff3
   * 02-Mapping/IP/repA/SRR576933.bam
   * 02-Mapping/IP/repA/SRR576933.bam.bai
   * 02-Mapping/IP/repB/SRR576934.bam
@@ -430,13 +430,13 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 3. Load the genome
   * Genomes / Load Genome from File...
   * Select the fasta file Escherichia_coli_K12.fasta located into the data directory
-4. Load an annotation file named Escherichia_coli_K_12_MG1655.annotation.fixed.bed into IGV
+4. Load an annotation file named Escherichia_coli_K12_MG1655.annotation.gff3 into IGV
   * File / Load from File...
   * Select the annotation file. The positions of the genes are now loaded.
 5. Load the three bam files (SRR576933.bam, SRR576934.bam and SRR576938.bam) in IGV.
 
 **Browse around in the genome. Do you see peaks?**  
-**Browse into IGV. Go to the following genes: b1127, b1108**
+**Browse into IGV. Go to the following genes: pepT, roxA**
 
 However, looking at BAM file as such does not allow to directly compare the two samples as data are not normalized. Let's generate normalized data for visualization.
 
