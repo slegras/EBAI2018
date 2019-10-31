@@ -106,6 +106,12 @@ cp -r /shared/home/mthomaschollier/data .
 └───data
 ```
 
+If you wish, you can check your directory structure:
+ ```bash
+ tree
+```
+
+
 ## Quality control of the reads and statistics <a name="qc"></a>
 **Goal**: Get some basic information on the data (read length, number of reads, global quality of datasets)  
 
@@ -163,12 +169,12 @@ scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/<your_projec
 # Enter your password
 ```
 8. On your machine, open this file with your favourite web browser.  
-9. Launch the FASTQC program on the control file (SRR576938.fastq)
+9. Launch the FASTQC program on the replicate (SRR576934.fastq.gz) and on the control file (SRR576938.fastq.gz)
 
 **Analyze the result of the FASTQC program:  
-How many reads are present in the file ?  
+How many reads are present in each file ?  
 What is the read length ?  
-Is the overall quality good ?  
+Is the overall quality good for the three samples ?  
 Are there any concerns raised by the report ? If so, can you tell where the problem might come from ?**  
 
 10. Once you are done with FastQC, unload it
@@ -229,12 +235,12 @@ cd index
 ```
 4. Try out bowtie-build
 ```bash
-bowtie-build
+srun bowtie-build
 ```
 5. Build the index for bowtie
 ```bash
 ## Creating genome index : provide the path to the genome file and the name to give to the index (Escherichia_coli_K12)
-bowtie-build ../../data/Escherichia_coli_K12.fasta Escherichia_coli_K12
+srun bowtie-build ../../data/Escherichia_coli_K12.fasta Escherichia_coli_K12
 ```
 6. Go back to upper directory i.e 02-Mapping
 ```bash
