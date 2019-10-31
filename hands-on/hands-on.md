@@ -357,21 +357,20 @@ module add samtools/1.9
 srun samtools flagstat Marked_SRR576933.bam
 ```
 
-
 Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq/)
 ```bash
-## If you are in 02-Mapping/IP
-cd ../..
+## Unload picard and samtools
+module rm samtools/1.9 picard/2.18.9
+## If you are in 02-Mapping/IP/repA
+cd ../../..
 ```
-
-<- CHECKED THIS FAR
 
 ## ChIP quality controls <a name="cqc"></a>
 **Goal**: The first exercise aims at plotting the **Lorenz curve** to assess the quality of the chIP. The second exercise aims at calculating the **NSC** and **RSC** ENCODE quality metrics. These metrics allow to classify the datasets (after mapping, contrary to FASTQC that works on raw reads) in regards to the NSC and RSC values observed in the ENCODE datasets (see ENCODE guidelines)
 
 
 ### 1 - Plot the Lorenz curve with Deeptools
-1. Create a directory named **03-ChIPQualityControls** in which to mapping results for IP
+1. Create a directory named **03-ChIPQualityControls** in which to put mapping results for IP
 ```bash
 mkdir 03-ChIPQualityControls
 ```
@@ -383,7 +382,10 @@ cd 03-ChIPQualityControls
   * -b: List of indexed BAM files
   * -plot: File name of the output figure (extension can be either “png”, “eps”, “pdf” or “svg”)
 ```bash
-plotFingerprint -b ../02-Mapping/IP/SRR576933.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
+## Load deeptools in your environment
+module add deeptools/3.2.0
+## Run deeptools fingerprint
+plotFingerprint -b ../02-Mapping/IP/repA/SRR576933.bam ../02-Mapping/IP/repB/SRR576934.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
 ```
 4. Download the file fingerprint.png on your local machine (either with ` scp ` or Cyberduck). Using ` scp ` it would look like this.
 ```bash
@@ -392,7 +394,7 @@ plotFingerprint -b ../02-Mapping/IP/SRR576933.bam ../02-Mapping/Control/SRR57693
 cd ~/Desktop/EBA2019_chipseq
 
 ## Download the file
-scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<login>/EBA2019_chipseq/03-ChIPQualityControls/fingerprint.png .
+scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/<your_project>/EBA2019_chipseq/03-ChIPQualityControls/fingerprint.png .
 # Enter your password
 ```
 
@@ -401,6 +403,8 @@ scp <login>@core.cluster.france-bioinformatique.fr:/shared/projects/training/<lo
 
 Go back to working home directory (i.e /shared/projects/training/\<login\>/EBA2019_chipseq)
 ```bash
+## Unload deepTools
+module rm deeptools/3.2.0
 ## If you are in 03-ChIPQualityControls
 cd ..
 ```
@@ -416,8 +420,10 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 1. Download the following files from the server onto your computer
   * data/Escherichia_coli_K12.fasta
   * data/Escherichia_coli_K_12_MG1655.annotation.fixed.bed
-  * 02-Mapping/IP/SRR576933.bam
-  * 02-Mapping/IP/SRR576933.bam.bai
+  * 02-Mapping/IP/repA/SRR576933.bam
+  * 02-Mapping/IP/repA/SRR576933.bam.bai
+  * 02-Mapping/IP/repB/SRR576934.bam
+  * 02-Mapping/IP/repB/SRR576934.bam.bai  
   * 02-Mapping/Control/SRR576938.bam
   * 02-Mapping/Control/SRR576938.bam.bai
 2. Open IGV on your computer
@@ -427,7 +433,7 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 4. Load an annotation file named Escherichia_coli_K_12_MG1655.annotation.fixed.bed into IGV
   * File / Load from File...
   * Select the annotation file. The positions of the genes are now loaded.
-5. Load the two bam files (SRR576933.bam and SRR576938.bam) in IGV.
+5. Load the three bam files (SRR576933.bam, SRR576934.bam and SRR576938.bam) in IGV.
 
 **Browse around in the genome. Do you see peaks?**  
 **Browse into IGV. Go to the following genes: b1127, b1108**
@@ -435,10 +441,13 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 However, looking at BAM file as such does not allow to directly compare the two samples as data are not normalized. Let's generate normalized data for visualization.
 
 ### 3 - Viewing scaled data
-[bamCoverage](https://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html) from deepTools generates BigWigs from BAM files
+[bamCoverage](https://deeptools.readthedocs.io/en/latest/content/tools/bamCoverage.html) from deepTools generates BigWigs out of BAM files
 1. Try it out
 ```bash
-bamCoverage --help
+## Load deeptools in your environment
+module add deeptools/3.2.0
+## run bamCoverage
+srun bamCoverage --help
 ```
 2. Create a directory named **04-Visualization** to store bamCoverage outputs
 ```bash
@@ -460,6 +469,8 @@ Your directory structure should be like this:
 └───02-Mapping
 |    └───index
 |    └───IP
+│       ├── repA
+│       └── repB
 |    └───Control
 │   
 └───03-ChIPQualityControls
@@ -470,25 +481,26 @@ Your directory structure should be like this:
 4. Generate a scaled bigwig file on the IP with bamCoverage
   * --bam: BAM file to process
   * --outFileName: output file name
-  * --outFileFormat: Output file type
+  * --outFileFormat: output file type
   * --effectiveGenomeSize : size of the mappable genome
   * --normalizeUsing : different overall normalization methods; we will use RPGC method corresponding to 1x average coverage
   * --skipNonCoveredRegions: skip non-covered regions
   * --extendReads 200: Extend reads to fragment size
   * --ignoreDuplicates: reads that have the same orientation and start position will be considered only once
 ```bash
-bamCoverage --bam ../02-Mapping/IP/Marked_SRR576933.bam \
+srun bamCoverage --bam ../02-Mapping/IP/repA/Marked_SRR576933.bam \
 --outFileName SRR576933_nodup.bw --outFileFormat bigwig --effectiveGenomeSize 4639675 \
 --normalizeUsing RPGC --skipNonCoveredRegions --extendReads 200 --ignoreDuplicates
 ```
-5. Do it for the control (be careful for the control you will need **5G** of memory to process the file)
-6. Download the two bigwig files you have just generated
+5. Do it for the replicate and the control (be careful for the control you will need **5G** of memory to process the file)
+6. Download the three bigwig files you have just generated
   * 04-Visualization/SRR576933_nodup.bw
+  * 04-Visualization/SRR576934_nodup.bw  
   * 04-Visualization/SRR576938_nodup.bw
-7. Load the two bigwig files in IGV
+7. Load the three bigwig files in IGV
   * File / Load from File...
-  * Select the two bigwig files.
-8. Set the visualization of the two bigwig files to be autoscaled
+  * Select the three bigwig files.
+8. Set the visualization of the three bigwig files to be autoscaled
   * Click right on the name of the tracks and select **Autoscale**
 
 **Go back to the genes we looked at earlier: b1127, b1108. Look at the shape of the signal.**  
