@@ -503,7 +503,7 @@ srun bamCoverage --bam ../02-Mapping/IP/repA/Marked_SRR576933.bam \
 8. Set the visualization of the three bigwig files to be autoscaled
   * Click right on the name of the tracks and select **Autoscale**
 
-**Go back to the genes we looked at earlier: b1127, b1108. Look at the shape of the signal.**  
+**Go back to the genes we looked at earlier: pepT, roxA. Look at the shape of the signal.**  
 **Keep IGV opened.**
 
 Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
