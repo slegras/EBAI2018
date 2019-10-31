@@ -267,7 +267,6 @@ Your directory structure should be like this:
 │       ├── repB
 ```
 
-<- CHECKED UNTIL THERE
 
 3. Let's see the parameters of bowtie before launching the mapping:
   * Escherichia_coli_K12 is the name of our genome index file
@@ -279,33 +278,41 @@ Your directory structure should be like this:
   * 2> SRR576933.out will output some statistics about the mapping in the file SRR576933.out
 ```bash  
 ## Run alignment
-bowtie ../index/Escherichia_coli_K12 ../../data/SRR576933.fastq.gz -v 2 -m 1 -3 1 -S 2> SRR576933.out > SRR576933.sam
+srun bowtie ../../index/Escherichia_coli_K12 ../../../data/SRR576933.fastq.gz -v 2 -m 1 -3 1 -S 2> SRR576933.out > SRR576933.sam
 ```  
 This should take few minutes as we work with a small genome. For the human genome, we would need either more time and more resources.
 
-Bowtie output is a [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) file. The SAM format correspond to large text files, that can be compressed ("zipped") into BAM format. The BAM files are usually sorted and indexed for fast access to the data it contains. The index of a given bam file is names .bam.bai or .bai file. Some tools require to have the index of the bam file to process it.
+Bowtie output is a [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) file. The SAM format corresponds to large text files, that can be compressed ("zipped") into a BAM format. The BAM files takes up  to 4 time less disk space and are usually sorted and indexed for fast access to the data it contains. The index of a given <prefix>.bam file is named <prefix>.bam.bai or <prefix>.bai file. Some tools require to have the index of the bam file to process it.
 
 4. Sort the sam file and create a bam file using samtools
   * -b: output BAM
 ```bash
-samtools sort SRR576933.sam | samtools view -b > SRR576933.bam
+## First load samtools
+module add samtools/1.9
+## Then run samtools
+srun samtools sort SRR576933.sam | samtools view -b > SRR576933.bam
 ```
 
 5. Create an index for the bam file
 ```bash
-samtools index SRR576933.bam
+srun samtools index SRR576933.bam
 ```
 
 6. Compress the .sam file (you could also delete the file)
 ```bash
-gzip SRR576933.sam
+srun gzip SRR576933.sam
 ```
 
 **Analyze the result of the mapped reads:  
 Open the file SRR576933.out (for example using the ` less ` command), which contains some statistics about the mapping. How many reads were mapped? How many multi-mapped reads were originally present in the sample? To quit less press 'q'**
 
-### 5 - Mapping the control
-1. Repeat the steps above (in 4 - Mapping the experiment) for the file SRR576938.fastq.gz in a directory named "**Control**" within the directory 02-Mapping.
+7. Once it's done, unload the tools you used
+```bash
+module rm samtools/1.9 bowtie/1.2.2
+```
+
+### 5 - Map the second replicate and the control
+1. Repeat the steps above (in 4 - Mapping the experiment) for the files SRR576934.fastq.gz and SRR576938.fastq.gz in directories named "**IP/repB**" and "**Control**" respectively within the directory 02-Mapping.
 
 **Analyze the result of the mapped reads:  
 Open the file SRR576938.out. How many reads were mapped?**
@@ -313,9 +320,9 @@ Open the file SRR576938.out. How many reads were mapped?**
 ## Estimating the number of duplicated reads <a name="dup"></a>
 **Goal**: Duplicated reads i.e reads mapped at the same positions in the genome are present in ChIP-seq results. They can arise for several reasons including a biased amplification during the PCR step of the library prep, DNA fragment coming from repetitive elements of the genome, sequencing saturation or the same clusters read several times on the flowcell (i.e optical duplicates). As analyzing ChIP-Seq data consist at some point in detecting signal enrichment, we can not keep duplicated reads for subsequent analysis. So let's detect them using [Picard](http://broadinstitute.github.io/picard/)   
 
-1. Go to the directory with alignment file of treatment (IP)
+1. Go to the directory with alignment file of the first replicate, repA (IP)
 ```bash
-cd /shared/projects/training/<login>/EBA2019_chipseq/02-Mapping/IP
+cd /shared/projects/<your_project>/EBA2019_chipseq/02-Mapping/IP/repA
 ```
 2. Run Picard markDuplicates to mark duplicated reads (= reads mapping at the exact same location on the genome)
   * CREATE_INDEX: Create .bai file for the result bam file with marked duplicate reads
@@ -324,6 +331,9 @@ cd /shared/projects/training/<login>/EBA2019_chipseq/02-Mapping/IP
   * METRICS: file with duplicates marking statistics
   * VALIDATION_STRINGENCY: Validation stringency for all SAM files read by picard.
 ```bash
+## Load picard
+module add picard/2.18.9
+## Run picard
 srun picard MarkDuplicates \
 CREATE_INDEX=true \
 INPUT=SRR576933.bam \
@@ -335,15 +345,20 @@ VALIDATION_STRINGENCY=STRICT
 To determine the number of duplicated reads marked by Picard, we can run the `samtools flagstat` command:
 
 ```bash
-samtools flagstat Marked_SRR576933.bam
+## Add samtools to your environment
+module add samtools/1.9
+## run samtools
+srun samtools flagstat Marked_SRR576933.bam
 ```
 
 
-Go back to working home directory (i.e /shared/projects/training/<login>/EBA2019_chipseq/)
+Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq/)
 ```bash
 ## If you are in 02-Mapping/IP
 cd ../..
 ```
+
+<- CHECKED THIS FAR
 
 ## ChIP quality controls <a name="cqc"></a>
 **Goal**: The first exercise aims at plotting the **Lorenz curve** to assess the quality of the chIP. The second exercise aims at calculating the **NSC** and **RSC** ENCODE quality metrics. These metrics allow to classify the datasets (after mapping, contrary to FASTQC that works on raw reads) in regards to the NSC and RSC values observed in the ENCODE datasets (see ENCODE guidelines)
