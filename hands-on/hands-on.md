@@ -517,20 +517,24 @@ cd ..
 **Goal**: Define the peaks, i.e. the region with a high density of reads, where the studied factor was bound
 
 ### 1 - Choosing a peak-calling program
-There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use MACS2 version 2.1.1.20160309 because it's known to produce generally good results, and it is well-maintained by the developer.
+There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use the callpeak function of MACS2 (version 2.1.1.20160309) because it's known to produce generally good results, and it is well-maintained by the developer.
 
 ### 2 - Calling the peaks
-1. Create a directory named **05-PeakCalling** to store annotatePeaks outputs
+1. Create a directory named **05-PeakCalling** and two directories named **repA** and **repB** within to store annotatePeaks
 ```bash
 mkdir 05-PeakCalling
+mkdir 05-PeakCalling/repA
+mkdir 05-PeakCalling/repB
 ```
-2. Go to the newly created directory
+2. Go to the newly created directory for replicate A
 ```bash
-cd 05-PeakCalling
+cd 05-PeakCalling/repA
 ```
 3. Try out MACS
 ```bash
-macs
+## Load macs2 in your environment
+module add macs2/2.1.1.20160309
+macs2 callpeak
 ```
 This prints the help of the program.
 
@@ -542,32 +546,70 @@ This prints the help of the program.
   * --name provides a prefix for the output files. We set this to FNR_Anaerobic_A, but it could be any name.
   * --bw The bandwidth is the size of the fragment extracted from the gel electrophoresis or expected from sonication. By default, this value is 300bp. Usually, this value is indicated in the Methods section of publications. In the studied publication, a sentence mentions "400bp fragments (FNR libraries)". We thus set this value to 400.
   * --keep-dup specifies how MACS should treat the reads that are located at the exact same location (duplicates). The manual specifies that keeping only 1 representative of these "stacks" of reads is giving the best results. We doesn't mention it as 1 is the default value.
+  * --fix-bimodal indicates that in the case where macs2 cannot find enough paired peaks between the plus strand and minus strand to build the shifting model, it can bypass this step and use a extension size of 200bp by default.
   <!-- * --bdg --single-profile will output a file in BEDGRAPH format to visualize the peak profiles in a genome browser. There will be one file for the treatment, and one for the control. -->
   <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.bam --format BAM  --gsize 4639675 \
---name "FNR_Anaerobic_A" --bw 400 --diag &> MACS.out
+macs2 callpeak -t ../../../02-Mapping/IP/repB/SRR576934.bam -c ../../../02-Mapping/Control/SRR576938.bam --format BAM --gsize 4639675 --name 'FNR_Anaerobic_B' --bw 400 --fix-bimodal &> MACS.out
 ```
-3. This should take a few minutes, mainly because of the --diag option. Without, the program runs faster.
+3. Run macs2 for replicate A, then go to repB directory and run macs2 for replicate B by changing the treatment file (-t) and the output file name (-n), this should take a few minutes each.
 
 ### 3 - Analyzing the MACS results
 **Look at the files that were created by MACS. Which files contains which information ?**  
 **How many peaks were detected by MACS ?**
 
-**At this point, you should have a BED file containing the peak coordinates.**
+**At this point, you should have two BED files containing the peak coordinates, one for each replicate.**
 
-Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
-```bash
+### 4 - Combine replicate together
+In order to take advantage of having biological replicates, we will create a combine set of peaks based on the reproducibility of each individual replicate peak calling. We will use the **Irreproducible Discovery Rate** (IDR) algorithm.
+
+1. Create a new directory to store the combined peak coordinates
+```
 ## If you are in 05-PeakCalling
-cd ..
+mkdir combined
+cd combined
+```
+Your directory structure should be like this:
+```
+/shared/projects/<your_project>/EBA2019_chipseq/05-PeakCalling
+├── repA
+│ 
+├── repB
+│
+└── combined <- you should be in this folder
 ```
 
-### 4 - Visualize peaks into IGV
+2. Load IDR and have a look at its parameters
+```bash
+## Load idr in your environment
+module add idr/2.0.4.2
+idr --help
+```
+--samples : peak file to process
+--input-file-type : format of the peak file, in our case it's narrowPeak
+--output-file : name of the resulting combined peak file
+--plot : plot additional diagnosis plot
 
-1. Download the BED file 05-PeakCalling/FNR_Anaerobic_A_peaks.bed to visualise in IGV.
+3. Run idr
+```bash
+idr --samples ../repA/FNR_Anaerobic_A_peaks.narrowPeak ../repB/FNR_Anaerobic_B_peaks.narrowPeak --input-file-type narrowPeak --output-file FNR_anaerobic_combined_peaks.bed --plot
+```
 
-**Go back again to the genes we looked at earlier: b1127, b1108. Do you see peaks?**
+4. Remove IDR and MACS2 from your environment and go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
+```bash
+module rm macs2/2.1.1.20160309
+module rm idr/2.0.4.2
+
+## If you are in 05-PeakCalling/combined
+cd ../..
+```
+
+### 5 - Visualize peaks into IGV
+
+1. Download the BED files 05-PeakCalling/repA/FNR_Anaerobic_A_peaks.bed ; 05-PeakCalling/repB/FNR_Anaerobic_B_peaks.bed and 05-PeakCalling/combined/FNR_anaerobic_combined_peaks.bed to visualise in IGV.
+
+**Go back again to the genes we looked at earlier: pepT, ycfP. Do you see peaks?**
 
 
 ## Motif analysis <a name="motif"></a>
