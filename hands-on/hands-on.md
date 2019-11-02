@@ -93,10 +93,10 @@ mkdir EBA2019_chipseq
 ```bash
 cd EBA2019_chipseq
 ```
-4. Copy the directory containing data <- NEED EDIT
+4. Copy the directory containing data
 
 ```bash
-cp -r /shared/home/mthomaschollier/data .
+cp -r /shared/home/sflochlay/ebai2019/atelier_chip/data/ .
 ```
 
 7. Your directory structure should be like this
@@ -224,7 +224,8 @@ cd 02-Mapping
 ```
 
 ### 3 - Prepare the index file
-1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta in the course folder) (The genome was downloaded from the NCBI). Note that we will not work with the latest version (NC_000913.3) but the previous one (NC_000913.2), because the available tools for visualization have not been updated yet to the latest version. This will not affect our results.
+1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta in the course folder) (The genome was downloaded from the NCBI).
+
 2. Create a directory named **index** in which to output bowtie indexes
 ```bash
 mkdir index
@@ -436,7 +437,7 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 5. Load the three bam files (SRR576933.bam, SRR576934.bam and SRR576938.bam) in IGV.
 
 **Browse around in the genome. Do you see peaks?**  
-**Browse into IGV. Go to the following genes: pepT, roxA**
+**Browse into IGV. Go to the following genes: pepT (geneID:b1127), ycfP (geneID:b1108)**
 
 However, looking at BAM file as such does not allow to directly compare the two samples as data are not normalized. Let's generate normalized data for visualization.
 
@@ -503,7 +504,7 @@ srun bamCoverage --bam ../02-Mapping/IP/repA/Marked_SRR576933.bam \
 8. Set the visualization of the three bigwig files to be autoscaled
   * Click right on the name of the tracks and select **Autoscale**
 
-**Go back to the genes we looked at earlier: pepT, roxA. Look at the shape of the signal.**  
+**Go back to the genes we looked at earlier: pepT, ycfP. Look at the shape of the signal.**  
 **Keep IGV opened.**
 
 Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
@@ -516,7 +517,7 @@ cd ..
 **Goal**: Define the peaks, i.e. the region with a high density of reads, where the studied factor was bound
 
 ### 1 - Choosing a peak-calling program
-There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use MACS version 1.4.2 because it's known to produce generally good results, and it is well-maintained by the developer. A new version (MACS2) is available.
+There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use MACS2 version 2.1.1.20160309 because it's known to produce generally good results, and it is well-maintained by the developer.
 
 ### 2 - Calling the peaks
 1. Create a directory named **05-PeakCalling** to store annotatePeaks outputs
@@ -542,7 +543,7 @@ This prints the help of the program.
   * --bw The bandwidth is the size of the fragment extracted from the gel electrophoresis or expected from sonication. By default, this value is 300bp. Usually, this value is indicated in the Methods section of publications. In the studied publication, a sentence mentions "400bp fragments (FNR libraries)". We thus set this value to 400.
   * --keep-dup specifies how MACS should treat the reads that are located at the exact same location (duplicates). The manual specifies that keeping only 1 representative of these "stacks" of reads is giving the best results. We doesn't mention it as 1 is the default value.
   <!-- * --bdg --single-profile will output a file in BEDGRAPH format to visualize the peak profiles in a genome browser. There will be one file for the treatment, and one for the control. -->
-  * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset.
+  <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
 macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.bam --format BAM  --gsize 4639675 \
