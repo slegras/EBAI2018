@@ -513,14 +513,14 @@ Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_c
 cd ..
 ```
 
-## Peak calling with MACS <a name="macs"></a>
+## Peak calling with MACS2 <a name="macs"></a>
 **Goal**: Define the peaks, i.e. the region with a high density of reads, where the studied factor was bound
 
 ### 1 - Choosing a peak-calling program
 There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use the callpeak function of MACS2 (version 2.1.1.20160309) because it's known to produce generally good results, and it is well-maintained by the developer.
 
 ### 2 - Calling the peaks
-1. Create a directory named **05-PeakCalling** and two directories named **repA** and **repB** within to store annotatePeaks
+1. Create a directory named **05-PeakCalling** and two directories named **repA** and **repB** within to store peaks coordinates.
 ```bash
 mkdir 05-PeakCalling
 mkdir 05-PeakCalling/repA
@@ -551,7 +551,10 @@ This prints the help of the program.
   <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-macs2 callpeak -t ../../../02-Mapping/IP/repB/SRR576934.bam -c ../../../02-Mapping/Control/SRR576938.bam --format BAM --gsize 4639675 --name 'FNR_Anaerobic_B' --bw 400 --fix-bimodal &> MACS.out
+macs2 callpeak -t ../../../02-Mapping/IP/repB/SRR576933.bam \
+-c ../../../02-Mapping/Control/SRR576938.bam --format BAM \
+--gsize 4639675 --name 'FNR_Anaerobic_A' --bw 400 \
+--fix-bimodal &> MACS.out
 ```
 3. Run macs2 for replicate A, then go to repB directory and run macs2 for replicate B by changing the treatment file (-t) and the output file name (-n), this should take a few minutes each.
 
@@ -572,12 +575,27 @@ cd combined
 ```
 Your directory structure should be like this:
 ```
-/shared/projects/<your_project>/EBA2019_chipseq/05-PeakCalling
-├── repA
-│ 
-├── repB
+/shared/projects/<your_project>/EBA2019_chipseq
 │
-└── combined <- you should be in this folder
+└───data
+│   
+└───01-QualityControl
+│   
+└───02-Mapping
+|    └───index
+|    └───IP
+│       ├── repA
+│       └── repB
+|    └───Control
+│   
+└───03-ChIPQualityControls
+│   
+└───04-Visualization
+|
+└───05-PeakCalling
+|    └───repA
+|    └───repB
+|    └───combined <- you should be in this folder
 ```
 
 2. Load IDR and have a look at its parameters
@@ -586,14 +604,16 @@ Your directory structure should be like this:
 module add idr/2.0.4.2
 idr --help
 ```
---samples : peak file to process
---input-file-type : format of the peak file, in our case it's narrowPeak
---output-file : name of the resulting combined peak file
---plot : plot additional diagnosis plot
+* --samples : peak file to process
+* --input-file-type : format of the peak file, in our case it's narrowPeak
+* --output-file : name of the resulting combined peak file
+* --plot : plot additional diagnosis plot
 
 3. Run idr
 ```bash
-idr --samples ../repA/FNR_Anaerobic_A_peaks.narrowPeak ../repB/FNR_Anaerobic_B_peaks.narrowPeak --input-file-type narrowPeak --output-file FNR_anaerobic_combined_peaks.bed --plot
+idr --samples ../repA/FNR_Anaerobic_A_peaks.narrowPeak ../repB/FNR_Anaerobic_B_peaks.narrowPeak \
+--input-file-type narrowPeak --output-file FNR_anaerobic_combined_peaks.bed \
+--plot
 ```
 
 4. Remove IDR and MACS2 from your environment and go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
@@ -607,7 +627,10 @@ cd ../..
 
 ### 5 - Visualize peaks into IGV
 
-1. Download the BED files 05-PeakCalling/repA/FNR_Anaerobic_A_peaks.bed ; 05-PeakCalling/repB/FNR_Anaerobic_B_peaks.bed and 05-PeakCalling/combined/FNR_anaerobic_combined_peaks.bed to visualise in IGV.
+1. Download the following BED files from the server into your computer to visualise in IGV :
+* 05-PeakCalling/repA/FNR_Anaerobic_A_peaks.bed
+* 05-PeakCalling/repB/FNR_Anaerobic_B_peaks.bed
+* 05-PeakCalling/combined/FNR_anaerobic_combined_peaks.bed
 
 **Go back again to the genes we looked at earlier: pepT, ycfP. Do you see peaks?**
 
