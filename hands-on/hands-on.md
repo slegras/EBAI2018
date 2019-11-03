@@ -534,7 +534,7 @@ cd 05-PeakCalling/repA
 ```bash
 ## Load macs2 in your environment
 module add macs2/2.1.1.20160309
-macs2 callpeak
+srun macs2 callpeak
 ```
 This prints the help of the program.
 
@@ -551,7 +551,7 @@ This prints the help of the program.
   <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-macs2 callpeak -t ../../../02-Mapping/IP/repB/SRR576933.bam \
+srun macs2 callpeak -t ../../../02-Mapping/IP/repB/SRR576933.bam \
 -c ../../../02-Mapping/Control/SRR576938.bam --format BAM \
 --gsize 4639675 --name 'FNR_Anaerobic_A' --bw 400 \
 --fix-bimodal &> MACS.out
@@ -602,7 +602,7 @@ Your directory structure should be like this:
 ```bash
 ## Load idr in your environment
 module add idr/2.0.4.2
-idr --help
+srun idr --help
 ```
 * --samples : peak file to process
 * --input-file-type : format of the peak file, in our case it's narrowPeak
@@ -611,7 +611,7 @@ idr --help
 
 3. Run idr
 ```bash
-idr --samples ../repA/FNR_Anaerobic_A_peaks.narrowPeak ../repB/FNR_Anaerobic_B_peaks.narrowPeak \
+srun idr --samples ../repA/FNR_Anaerobic_A_peaks.narrowPeak ../repB/FNR_Anaerobic_B_peaks.narrowPeak \
 --input-file-type narrowPeak --output-file FNR_anaerobic_combined_peaks.bed \
 --plot
 ```
@@ -676,11 +676,15 @@ Your directory structure should be like this:
 
 3. Extract peak sequence in fasta format
 ```bash
+## First load samtools
+module add samtools/1.9
 ## Create an index of the genome fasta file
-samtools faidx ../data/Escherichia_coli_K12.fasta
+srun samtools faidx ../data/Escherichia_coli_K12.fasta
 
+## First load bedtools
+module add bedtools/2.27.1
 ## Extract fasta sequence from genomic coordinate of peaks
-bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
+srun bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
 -bed ../05-PeakCalling/FNR_Anaerobic_A_peaks.bed -fo FNR_Anaerobic_A_peaks.fa
 ```
 
@@ -701,15 +705,15 @@ bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
 ### 3 - Motif discovery with RSAT (short peaks)
 1. Restrict the dataset to the summit of the peaks +/- 100bp using bedtools slop. Using bedtools slop to extend genomic coordinates allow not to go beyond chromosome boundaries as the user give the size of chromosomes as input (see fai file).
 ```bash
-bedtools slop -b 100 -i ../05-PeakCalling/FNR_Anaerobic_A_summits.bed -g ../data/Escherichia_coli_K12.fasta.fai > FNR_Anaerobic_A_summits+-100.bed
+srun bedtools slop -b 100 -i ../05-PeakCalling/FNR_Anaerobic_A_summits.bed -g ../data/Escherichia_coli_K12.fasta.fai > FNR_Anaerobic_A_summits+-100.bed
 ```
 2. Extract the sequences for this BED file
 ```bash
 ## Extract fasta sequence from genomic coordinate of peaks
-bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta -bed FNR_Anaerobic_A_summits+-100.bed -fo FNR_Anaerobic_A_summits+-100.fa
+srun bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta -bed FNR_Anaerobic_A_summits+-100.bed -fo FNR_Anaerobic_A_summits+-100.fa
 
 ## Compress the genome file as we won't need it anymore
-gzip ../data/Escherichia_coli_K12.fasta
+srun gzip ../data/Escherichia_coli_K12.fasta
 ```
 3. Run RSAT peak-motifs with the same options, but choosing as input file this new dataset (FNR_Anaerobic_A_summits+-100.fa)
 and setting the title box to **FNR Anaerobic A summit +/-100bp**
@@ -743,21 +747,15 @@ You should now have downloaded 3 files:
 
 ### 2 - Performing a first evaluation of peak sets using R
 
-Now, we will use **RStudio** to perform the rest of the analysis in R. For the analysis, we will need to install some R libraries, in particular [ChIPSeeker](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html)
+Now, we will use **RStudio** to perform the rest of the analysis in R. For the analysis, we will need some R/Bioconductor libraries
 
-1. Open your **RStudio** tool
-2. Install
    * [ChIPSeeker](https://bioconductor.org/packages/release/bioc/html/ChIPseeker.html)
    * [mouse gene annotation](http://bioconductor.org/packages/release/data/annotation/html/TxDb.Mmusculus.UCSC.mm9.knownGene.html)
    * [mouse functional annotation](http://bioconductor.org/packages/release/data/annotation/html/org.Mm.eg.db.html)
    * [clusterProfiler: Gene set annotation tool](http://bioconductor.org/packages/release/bioc/html/clusterProfiler.html)
 
-following the instruction of the corresponding websites.
-3. Install the  [RColorBrewer](https://www.rdocumentation.org/packages/RColorBrewer/versions/1.1-2/topics/RColorBrewer) package to produce nice plots
-```r
-install.packages('RColorBrewer')
-```
-4. load the required packages
+1. Go to the [IFB Rstudio](https://rstudio.cluster.france-bioinformatique.fr/)
+2. load the required packages
 ```r
 # load the required libraries
 library(RColorBrewer)
@@ -770,10 +768,10 @@ txdb = TxDb.Mmusculus.UCSC.mm9.knownGene
 col = brewer.pal(9,'Set1')
 ````
 
-5. read the peak files for the three datasets:
+3. read the peak files for the three datasets:
 
 ```r
-# set the working directiry to the folder in which the peaks are stored
+# set the working directory to the folder in which the peaks are stored
 setwd(<directory containing the peak files>)
 
 # read the peaks for each dataset
