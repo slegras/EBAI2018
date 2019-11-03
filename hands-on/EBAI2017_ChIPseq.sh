@@ -3,7 +3,7 @@
 ###################################################
 ################# Variable definition
 login=slegras ## To be changed with your login!!
-home=/shared/projects/training/${login}/EBA2017_chipseq
+home=/shared/projects/training/${login}/EBA2019_chipseq
 
 ###################################################
 ################# Working environment
@@ -18,6 +18,7 @@ cd data
 ## copy fastq/fasta files from local computer
 ## fastq file got downloaded from EBI
 # ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR576/SRR576933/SRR576933.fastq.gz
+# ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR576/SRR576934/SRR576934.fastq.gz
 # ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR576/SRR576938/SRR576938.fastq.gz
 ## genome fasta file got downloaded from NCBI website
 ## annotation track (.gtf) was downloaded from UCSC table browser (gtf file)
@@ -29,8 +30,8 @@ cd data
 #  gzip > Escherichia_coli_K_12_MG1655.annotation.fixed.gtf.gz
 
 ## Copy data
-srun cp -r /shared/projects/training/slegras/EBA2017_chipseq/data \
-/shared/projects/training/slegras/EBA2017_chipseq/scripts/ .
+srun cp -r /shared/projects/training/slegras/EBA2019_chipseq/data \
+/shared/projects/training/slegras/EBA2019_chipseq/scripts/ .
 cd $home
 
 # ## Create a directory for scripts

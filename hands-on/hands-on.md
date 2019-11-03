@@ -595,6 +595,8 @@ Your directory structure should be like this:
 └───02-Mapping
 |    └───index
 |    └───IP
+│       ├── repA
+│       └── repB
 │   
 └───03-ChIPQualityControls
 │   
@@ -719,7 +721,7 @@ midbrain=peaks.midbrain,
 limb=peaks.limb)
 ```
 
-The peaks are stored as **GenomicRanges** object; this is an R format which ressembles the bed format, but is optimized in terms of memory requirements and speed of exectution.
+The peaks are stored as **GenomicRanges** object; this is an R format which look like the bed format, but is optimized in terms of memory requirements and speed of execution.
 
 We can start by computing some basic statistics on the peak sets.
 
@@ -879,3 +881,4 @@ Dobin, A., Davis, C.A., Schlesinger, F., Drenkow, J., Zaleski, C., Jha, S., Batu
 Langmead, B., and Salzberg, S.L. (2012). Fast gapped-read alignment with Bowtie 2. Nat. Methods 9, 357–359.
 Langmead, B., Trapnell, C., Pop, M., and Salzberg, S.L. (2009). Ultrafast and memory-efficient alignment of short DNA sequences to the human genome. Genome Biol. 10, R25.
 Li, H., and Durbin, R. (2009). Fast and accurate short read alignment with Burrows–Wheeler transform. Bioinformatics 25, 1754–1760.
+Ramírez, F., Ryan, D.P., Grüning, B., Bhardwaj, V., Kilpert, F., Richter, A.S., Heyne, S., Dündar, F., and Manke, T. (2016). deepTools2: a next generation web server for deep-sequencing data analysis. Nucleic Acids Res. 44, W160–W165.
