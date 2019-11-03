@@ -93,10 +93,10 @@ mkdir EBA2019_chipseq
 ```bash
 cd EBA2019_chipseq
 ```
-4. Copy the directory containing data <- NEED EDIT
+4. Copy the directory containing data
 
 ```bash
-cp -r /shared/home/mthomaschollier/data .
+cp -r /shared/home/sflochlay/ebai2019/atelier_chip/data/ .
 ```
 
 7. Your directory structure should be like this
@@ -224,7 +224,8 @@ cd 02-Mapping
 ```
 
 ### 3 - Prepare the index file
-1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta in the course folder) (The genome was downloaded from the NCBI). Note that we will not work with the latest version (NC_000913.3) but the previous one (NC_000913.2), because the available tools for visualization have not been updated yet to the latest version. This will not affect our results.
+1. To make the index file, you will need the complete genome, in FASTA format. It has already been downloaded to gain time (Escherichia_coli_K12.fasta in the course folder) (The genome was downloaded from the NCBI).
+
 2. Create a directory named **index** in which to output bowtie indexes
 ```bash
 mkdir index
@@ -419,7 +420,7 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 ### 2 - Viewing the raw alignment data in IGV
 1. Download the following files from the server onto your computer
   * data/Escherichia_coli_K12.fasta
-  * data/Escherichia_coli_K_12_MG1655.annotation.fixed.bed
+  * data/Escherichia_coli_K12_MG1655.annotation.gff3
   * 02-Mapping/IP/repA/SRR576933.bam
   * 02-Mapping/IP/repA/SRR576933.bam.bai
   * 02-Mapping/IP/repB/SRR576934.bam
@@ -430,13 +431,13 @@ If the data are on your computer, to prevent data transfer, it's easier to visua
 3. Load the genome
   * Genomes / Load Genome from File...
   * Select the fasta file Escherichia_coli_K12.fasta located into the data directory
-4. Load an annotation file named Escherichia_coli_K_12_MG1655.annotation.fixed.bed into IGV
+4. Load an annotation file named Escherichia_coli_K12_MG1655.annotation.gff3 into IGV
   * File / Load from File...
   * Select the annotation file. The positions of the genes are now loaded.
 5. Load the three bam files (SRR576933.bam, SRR576934.bam and SRR576938.bam) in IGV.
 
 **Browse around in the genome. Do you see peaks?**  
-**Browse into IGV. Go to the following genes: b1127, b1108**
+**Browse into IGV. Go to the following genes: pepT (geneID:b1127), ycfP (geneID:b1108)**
 
 However, looking at BAM file as such does not allow to directly compare the two samples as data are not normalized. Let's generate normalized data for visualization.
 
@@ -503,7 +504,7 @@ srun bamCoverage --bam ../02-Mapping/IP/repA/Marked_SRR576933.bam \
 8. Set the visualization of the three bigwig files to be autoscaled
   * Click right on the name of the tracks and select **Autoscale**
 
-**Go back to the genes we looked at earlier: b1127, b1108. Look at the shape of the signal.**  
+**Go back to the genes we looked at earlier: pepT, ycfP. Look at the shape of the signal.**  
 **Keep IGV opened.**
 
 Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
@@ -512,24 +513,28 @@ Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_c
 cd ..
 ```
 
-## Peak calling with MACS <a name="macs"></a>
+## Peak calling with MACS2 <a name="macs"></a>
 **Goal**: Define the peaks, i.e. the region with a high density of reads, where the studied factor was bound
 
 ### 1 - Choosing a peak-calling program
-There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use MACS version 1.4.2 because it's known to produce generally good results, and it is well-maintained by the developer. A new version (MACS2) is available.
+There are multiple programs to perform the peak-calling step. Some are more directed towards histone marks (broad peaks) while others are specific to narrow peaks (transcription factors). Here we will use the callpeak function of MACS2 (version 2.1.1.20160309) because it's known to produce generally good results, and it is well-maintained by the developer.
 
 ### 2 - Calling the peaks
-1. Create a directory named **05-PeakCalling** to store annotatePeaks outputs
+1. Create a directory named **05-PeakCalling** and two directories named **repA** and **repB** within to store peaks coordinates.
 ```bash
 mkdir 05-PeakCalling
+mkdir 05-PeakCalling/repA
+mkdir 05-PeakCalling/repB
 ```
-2. Go to the newly created directory
+2. Go to the newly created directory for replicate A
 ```bash
-cd 05-PeakCalling
+cd 05-PeakCalling/repA
 ```
 3. Try out MACS
 ```bash
-macs
+## Load macs2 in your environment
+module add macs2/2.1.1.20160309
+macs2 callpeak
 ```
 This prints the help of the program.
 
@@ -541,32 +546,93 @@ This prints the help of the program.
   * --name provides a prefix for the output files. We set this to FNR_Anaerobic_A, but it could be any name.
   * --bw The bandwidth is the size of the fragment extracted from the gel electrophoresis or expected from sonication. By default, this value is 300bp. Usually, this value is indicated in the Methods section of publications. In the studied publication, a sentence mentions "400bp fragments (FNR libraries)". We thus set this value to 400.
   * --keep-dup specifies how MACS should treat the reads that are located at the exact same location (duplicates). The manual specifies that keeping only 1 representative of these "stacks" of reads is giving the best results. We doesn't mention it as 1 is the default value.
+  * --fix-bimodal indicates that in the case where macs2 cannot find enough paired peaks between the plus strand and minus strand to build the shifting model, it can bypass this step and use a extension size of 200bp by default.
   <!-- * --bdg --single-profile will output a file in BEDGRAPH format to visualize the peak profiles in a genome browser. There will be one file for the treatment, and one for the control. -->
-  * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset.
+  <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-macs -t ../02-Mapping/IP/SRR576933.bam -c ../02-Mapping/Control/SRR576938.bam --format BAM  --gsize 4639675 \
---name "FNR_Anaerobic_A" --bw 400 --diag &> MACS.out
+macs2 callpeak -t ../../../02-Mapping/IP/repB/SRR576933.bam \
+-c ../../../02-Mapping/Control/SRR576938.bam --format BAM \
+--gsize 4639675 --name 'FNR_Anaerobic_A' --bw 400 \
+--fix-bimodal &> MACS.out
 ```
-3. This should take a few minutes, mainly because of the --diag option. Without, the program runs faster.
+3. Run macs2 for replicate A, then go to repB directory and run macs2 for replicate B by changing the treatment file (-t) and the output file name (-n), this should take a few minutes each.
 
 ### 3 - Analyzing the MACS results
 **Look at the files that were created by MACS. Which files contains which information ?**  
 **How many peaks were detected by MACS ?**
 
-**At this point, you should have a BED file containing the peak coordinates.**
+**At this point, you should have two BED files containing the peak coordinates, one for each replicate.**
 
-Go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
-```bash
+### 4 - Combine replicate together
+In order to take advantage of having biological replicates, we will create a combine set of peaks based on the reproducibility of each individual replicate peak calling. We will use the **Irreproducible Discovery Rate** (IDR) algorithm.
+
+1. Create a new directory to store the combined peak coordinates
+```
 ## If you are in 05-PeakCalling
-cd ..
+mkdir combined
+cd combined
+```
+Your directory structure should be like this:
+```
+/shared/projects/<your_project>/EBA2019_chipseq
+│
+└───data
+│   
+└───01-QualityControl
+│   
+└───02-Mapping
+|    └───index
+|    └───IP
+│       ├── repA
+│       └── repB
+|    └───Control
+│   
+└───03-ChIPQualityControls
+│   
+└───04-Visualization
+|
+└───05-PeakCalling
+|    └───repA
+|    └───repB
+|    └───combined <- you should be in this folder
 ```
 
-### 4 - Visualize peaks into IGV
+2. Load IDR and have a look at its parameters
+```bash
+## Load idr in your environment
+module add idr/2.0.4.2
+idr --help
+```
+* --samples : peak file to process
+* --input-file-type : format of the peak file, in our case it's narrowPeak
+* --output-file : name of the resulting combined peak file
+* --plot : plot additional diagnosis plot
 
-1. Download the BED file 05-PeakCalling/FNR_Anaerobic_A_peaks.bed to visualise in IGV.
+3. Run idr
+```bash
+idr --samples ../repA/FNR_Anaerobic_A_peaks.narrowPeak ../repB/FNR_Anaerobic_B_peaks.narrowPeak \
+--input-file-type narrowPeak --output-file FNR_anaerobic_combined_peaks.bed \
+--plot
+```
 
-**Go back again to the genes we looked at earlier: b1127, b1108. Do you see peaks?**
+4. Remove IDR and MACS2 from your environment and go back to working home directory (i.e /shared/projects/<your_project>/EBA2019_chipseq)
+```bash
+module rm macs2/2.1.1.20160309
+module rm idr/2.0.4.2
+
+## If you are in 05-PeakCalling/combined
+cd ../..
+```
+
+### 5 - Visualize peaks into IGV
+
+1. Download the following BED files from the server into your computer to visualise in IGV :
+* 05-PeakCalling/repA/FNR_Anaerobic_A_peaks.bed
+* 05-PeakCalling/repB/FNR_Anaerobic_B_peaks.bed
+* 05-PeakCalling/combined/FNR_anaerobic_combined_peaks.bed
+
+**Go back again to the genes we looked at earlier: pepT, ycfP. Do you see peaks?**
 
 
 ## Motif analysis <a name="motif"></a>
