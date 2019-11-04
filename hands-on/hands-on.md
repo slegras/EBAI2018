@@ -493,11 +493,11 @@ Your directory structure should be like this:
   * --extendReads 200: Extend reads to fragment size
   * --ignoreDuplicates: reads that have the same orientation and start position will be considered only once
 ```bash
-srun bamCoverage --bam ../02-Mapping/IP/repA/Marked_SRR576933.bam \
+srun --mem=3G bamCoverage --bam ../02-Mapping/IP/repA/Marked_SRR576933.bam \
 --outFileName SRR576933_nodup.bw --outFileFormat bigwig --effectiveGenomeSize 4639675 \
 --normalizeUsing RPGC --skipNonCoveredRegions --extendReads 200 --ignoreDuplicates
 ```
-5. Do it for the replicate and the control (be careful for the control you will need **5G** of memory to process the file)
+5. Do it for the replicate and the control (be careful for the control you will need **5G** of memory to process the file).
 6. Download the three bigwig files you have just generated
   * 04-Visualization/SRR576933_nodup.bw
   * 04-Visualization/SRR576934_nodup.bw  
