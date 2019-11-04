@@ -534,7 +534,7 @@ mkdir 05-PeakCalling/repB
 ```bash
 cd 05-PeakCalling/repA
 ```
-3. Try out MACS
+3. Try out MACS2
 ```bash
 ## Load macs2 in your environment
 module add macs2/2.1.1.20160309
@@ -555,7 +555,7 @@ This prints the help of the program.
   <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-srun macs2 callpeak -t ../../../02-Mapping/IP/repB/SRR576933.bam \
+srun macs2 callpeak -p 1e-3 -t ../../../02-Mapping/IP/repB/SRR576933.bam \
 -c ../../../02-Mapping/Control/SRR576938.bam --format BAM \
 --gsize 4639675 --name 'FNR_Anaerobic_A' --bw 400 \
 --fix-bimodal &> MACS.out
@@ -732,11 +732,11 @@ In this part, we will use a different set of peaks obtained using a peak caller 
 From now on, we will work locally on your personal machine.
 
 0. We will download the already called peak files in bed format from GEO.
-Create a new folder for this analysis on **your** machine
+Create a new folder and go in it.
 ```bash
-cd ~/Desktop/EBA2019_chipseq
-mkdir PeakAnnotation
-cd PeakAnnotation
+cd /shared/projects/<your_project>/EBA2019_chipseq
+mkdir 07-PeakAnnotation
+cd 07-PeakAnnotation
 ```
 1. Search for the dataset **GSE13845** either using Google or from the front page of [GEO](https://www.ncbi.nlm.nih.gov/geo/)
 2. On the description page, find the three GSM files, and click on each of then
@@ -776,7 +776,7 @@ col = brewer.pal(9,'Set1')
 
 ```r
 # set the working directory to the folder in which the peaks are stored
-setwd(<directory containing the peak files>)
+setwd("/shared/projects/<your_project>/EBA2019_chipseq/07-PeakAnnotation")
 
 # read the peaks for each dataset
 peaks.forebrain = readPeakFile('GSM348064_p300_peaks.txt.gz')
