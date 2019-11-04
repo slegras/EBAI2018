@@ -386,7 +386,7 @@ cd 03-ChIPQualityControls
 ## Load deeptools in your environment
 module add deeptools/3.2.0
 ## Run deeptools fingerprint
-plotFingerprint -b ../02-Mapping/IP/repA/SRR576933.bam ../02-Mapping/IP/repB/SRR576934.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
+srun plotFingerprint -b ../02-Mapping/IP/repA/SRR576933.bam ../02-Mapping/IP/repB/SRR576934.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
 ```
 4. Download the file fingerprint.png on your local machine (either with ` scp ` or Cyberduck). Using ` scp ` it would look like this.
 ```bash
