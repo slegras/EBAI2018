@@ -388,7 +388,11 @@ module add deeptools/3.2.0
 ## Run deeptools fingerprint
 srun plotFingerprint -b ../02-Mapping/IP/repA/SRR576933.bam ../02-Mapping/IP/repB/SRR576934.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
 ```
-4. Download the file fingerprint.png on your local machine (either with ` scp ` or Cyberduck). Using ` scp ` it would look like this.
+4. plotFingerprint takes ages to run. Take the file that has already been prepared for the training
+```bash
+cp /shared/home/sflochlay/ebai2019/atelier_chip/03-ChIPQualityControls/fingerprint.png .
+```
+5. Download the file fingerprint.png on your local machine (either with ` scp ` or Cyberduck). Using ` scp ` it would look like this.
 ```bash
 ### OPEN A NEW TERMINAL
 ## Go to the location on your computer, where you want to put the data
