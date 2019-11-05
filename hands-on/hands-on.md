@@ -551,16 +551,30 @@ This prints the help of the program.
   * --bw The bandwidth is the size of the fragment extracted from the gel electrophoresis or expected from sonication. By default, this value is 300bp. Usually, this value is indicated in the Methods section of publications. In the studied publication, a sentence mentions "400bp fragments (FNR libraries)". We thus set this value to 400.
   * --keep-dup specifies how MACS should treat the reads that are located at the exact same location (duplicates). The manual specifies that keeping only 1 representative of these "stacks" of reads is giving the best results. We doesn't mention it as 1 is the default value.
   * --fix-bimodal indicates that in the case where macs2 cannot find enough paired peaks between the plus strand and minus strand to build the shifting model, it can bypass this step and use a extension size of 200bp by default.
+  * -p 1e-2 indicates that we report the peaks if their associated p-value is lower than 1e-2. This is a relaxed threshold as we want to keep a high number of false positives in our peak set to later compute the IDR analysis.
   <!-- * --bdg --single-profile will output a file in BEDGRAPH format to visualize the peak profiles in a genome browser. There will be one file for the treatment, and one for the control. -->
   <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-srun macs2 callpeak -p 1e-3 -t ../../../02-Mapping/IP/repB/SRR576933.bam \
+srun macs2 callpeak -t ../../../02-Mapping/IP/repA/SRR576933.bam \
 -c ../../../02-Mapping/Control/SRR576938.bam --format BAM \
 --gsize 4639675 --name 'FNR_Anaerobic_A' --bw 400 \
---fix-bimodal &> MACS.out
+--fix-bimodal -p 1e-2 &> MACS.out
 ```
 3. Run macs2 for replicate A, then go to repB directory and run macs2 for replicate B by changing the treatment file (-t) and the output file name (-n), this should take a few minutes each.
+
+4. In a new directory called pool, run macs2 for the pooled replicates A and B by giving both bam files as input treatment files (-t).
+```bash
+# If you are in 05-PeakCalling
+mkdir pool
+cd pool
+
+# Run macs2 for pooled replicates
+srun macs2 callpeak -t ../../../02-Mapping/IP/repA/SRR576933.bam ../../../02-Mapping/IP/repB/SRR576934.bam \
+-c ../../../02-Mapping/Control/SRR576938.bam --format BAM \
+--gsize 4639675 --name 'FNR_Anaerobic_pool' --bw 400 \
+--fix-bimodal -p 1e-2 &> MACS.out
+```
 
 ### 3 - Analyzing the MACS results
 **Look at the files that were created by MACS. Which files contains which information ?**  
@@ -599,6 +613,7 @@ Your directory structure should be like this:
 └───05-PeakCalling
 |    └───repA
 |    └───repB
+|    └───pool
 |    └───combined <- you should be in this folder
 ```
 
@@ -608,7 +623,8 @@ Your directory structure should be like this:
 module add idr/2.0.4.2
 srun idr --help
 ```
-* --samples : peak file to process
+* --samples : peak files of each individual replicate
+* --peak-list : the peak file of the pooled replicates, it will be used as a master peak set to compare with the regions from each replicates
 * --input-file-type : format of the peak file, in our case it's narrowPeak
 * --output-file : name of the resulting combined peak file
 * --plot : plot additional diagnosis plot
@@ -616,6 +632,7 @@ srun idr --help
 3. Run idr
 ```bash
 srun idr --samples ../repA/FNR_Anaerobic_A_peaks.narrowPeak ../repB/FNR_Anaerobic_B_peaks.narrowPeak \
+--peak-list ../pool/FNR_Anaerobic_pool_peaks.narrowPeak
 --input-file-type narrowPeak --output-file FNR_anaerobic_combined_peaks.bed \
 --plot
 ```
