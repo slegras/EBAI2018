@@ -96,7 +96,7 @@ cd EBA2019_chipseq
 4. Copy the directory containing data
 
 ```bash
-cp -r /shared/home/sflochlay/ebai2019/atelier_chip/data/ .
+srun cp -r /shared/home/sflochlay/ebai2019/atelier_chip/data/ .
 ```
 
 7. Your directory structure should be like this
