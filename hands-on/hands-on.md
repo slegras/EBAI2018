@@ -297,7 +297,7 @@ Bowtie output is a [SAM](https://samtools.github.io/hts-specs/SAMv1.pdf) file. T
 ## First load samtools
 module add samtools/1.9
 ## Then run samtools
-srun samtools sort SRR576933.sam | samtools view -b > SRR576933.bam
+srun samtools sort SRR576933.sam | srun samtools view -b > SRR576933.bam
 ```
 
 5. Create an index for the bam file
