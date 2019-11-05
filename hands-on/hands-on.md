@@ -968,7 +968,7 @@ Langmead, B., Trapnell, C., Pop, M., and Salzberg, S.L. (2009). Ultrafast and me
 Li, H., and Durbin, R. (2009). Fast and accurate short read alignment with Burrows–Wheeler transform. Bioinformatics 25, 1754–1760.
 Ramírez, F., Ryan, D.P., Grüning, B., Bhardwaj, V., Kilpert, F., Richter, A.S., Heyne, S., Dündar, F., and Manke, T. (2016). deepTools2: a next generation web server for deep-sequencing data analysis. Nucleic Acids Res. 44, W160–W165.
 
-## During Tuesday lunch break <a name="introduction"></a>
+## During Tuesday lunch break <a name="lunch"></a>
 Download mapping results already generated (as it takes a while to download)
 ```bash
 cd <some directory you want on your computer>
