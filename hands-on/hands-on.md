@@ -386,9 +386,9 @@ cd 03-ChIPQualityControls
 ## Load deeptools in your environment
 module add deeptools/3.2.0
 ## Run deeptools fingerprint
-srun plotFingerprint -b ../02-Mapping/IP/repA/SRR576933.bam ../02-Mapping/IP/repB/SRR576934.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint.png
+srun plotFingerprint --numberOfSamples 10000 -b ../02-Mapping/IP/repA/SRR576933.bam ../02-Mapping/IP/repB/SRR576934.bam ../02-Mapping/Control/SRR576938.bam -plot fingerprint_50000.png
 ```
-4. plotFingerprint takes ages to run. Take the file that has already been prepared for the training
+4. If plotFingerprint takes ages to run. Take the file that has already been prepared for the training.
 ```bash
 cp /shared/home/sflochlay/ebai2019/atelier_chip/03-ChIPQualityControls/fingerprint.png .
 ```
