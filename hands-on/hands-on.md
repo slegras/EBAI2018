@@ -14,7 +14,7 @@
 11. [Peak annotation using R](#peakr)
 12. [FAQ](#faq)
 13. [References](#ref)
-
+14. [During Tuesday lunch break](#lunch)
 
 
 ## Introduction <a name="introduction"></a>
@@ -967,3 +967,10 @@ Langmead, B., and Salzberg, S.L. (2012). Fast gapped-read alignment with Bowtie 
 Langmead, B., Trapnell, C., Pop, M., and Salzberg, S.L. (2009). Ultrafast and memory-efficient alignment of short DNA sequences to the human genome. Genome Biol. 10, R25.
 Li, H., and Durbin, R. (2009). Fast and accurate short read alignment with Burrows–Wheeler transform. Bioinformatics 25, 1754–1760.
 Ramírez, F., Ryan, D.P., Grüning, B., Bhardwaj, V., Kilpert, F., Richter, A.S., Heyne, S., Dündar, F., and Manke, T. (2016). deepTools2: a next generation web server for deep-sequencing data analysis. Nucleic Acids Res. 44, W160–W165.
+
+## During Tuesday lunch break <a name="introduction"></a>
+Download mapping results already generated (as it takes a while to download)
+```bash
+cd <some directory you want on your computer>
+scp -r <your login>@core.cluster.france-bioinformatique.fr:/shared/projects/ebai2019/atelier_chip/EBA2019_chipseq/02-Mapping/*bam* .
+```
