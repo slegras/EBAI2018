@@ -556,8 +556,8 @@ This prints the help of the program.
   <!-- * --diag is optional and increases the running time. It tests the saturation of the dataset, and gives an idea of how many peaks are found with subsets of the initial dataset. -->
   * &> MACS.out will output the verbosity (=information) in the file MACS.out
 ```bash
-srun macs2 callpeak -t ../../../02-Mapping/IP/repA/SRR576933.bam \
--c ../../../02-Mapping/Control/SRR576938.bam --format BAM \
+srun macs2 callpeak -t ../../02-Mapping/IP/repA/SRR576933.bam \
+-c ../../02-Mapping/Control/SRR576938.bam --format BAM \
 --gsize 4639675 --name 'FNR_Anaerobic_A' --bw 400 \
 --fix-bimodal -p 1e-2 &> MACS.out
 ```
