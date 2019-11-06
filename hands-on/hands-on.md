@@ -582,7 +582,7 @@ srun macs2 callpeak -t ../../../02-Mapping/IP/repA/SRR576933.bam ../../../02-Map
 
 **At this point, you should have two BED files containing the peak coordinates, one for each replicate.**
 
-### 4 - Combine replicate together
+### 4 - Combine replicate together (IDR)
 In order to take advantage of having biological replicates, we will create a combine set of peaks based on the reproducibility of each individual replicate peak calling. We will use the **Irreproducible Discovery Rate** (IDR) algorithm.
 
 1. Create a new directory to store the combined peak coordinates
@@ -617,7 +617,7 @@ Your directory structure should be like this:
 |    └───combined <- you should be in this folder
 ```
 
-2. Load IDR and have a look at its parameters
+2. Load the module idr and have a look at its parameters
 ```bash
 ## Load idr in your environment
 module add idr/2.0.4.2
