@@ -662,7 +662,7 @@ cd ../..
 ### 1 - Retrieve the peak sequences corresponding to the peak coordinate file (BED)
 
 For the motif analysis, you first need to extract the sequences corresponding to the peaks. There are several ways to do this (as usual...). If you work on a UCSC-supported organism, the easiest is to use RSAT fetch-sequences or Galaxy. Here, we will use Bedtools, as we have the genome of interest on our computer (Escherichia_coli_K12.fasta).
-1. Create a directory named **07-MotifAnalysis** to store data needed for motif analysis
+1. Create a directory named **06-MotifAnalysis** to store data needed for motif analysis
 ```bash
 mkdir 06-MotifAnalysis
 ```
@@ -717,7 +717,7 @@ srun bedtools getfasta -fi ../data/Escherichia_coli_K12.fasta \
 3. The default peak-motifs web form only displays the essential options. There are only two mandatory parameters.
   * The **title box**, which you will set as **FNR Anaerobic** . The **sequences**, that you will **upload from your computer**, by clicking on the button Choose file, and select the file **FNR_anaerobic_combined_peaks.fa** from your computer.
 4. We will now modify some of the advanced options in order to fine-tune the analysis according to your data set.
-  * Open the "Reduce peak sequences" title, and make sure the "**Cut peak sequences: +/- **" option is set to **0** (we wish to analyze our full dataset)
+  * Open the "Reduce peak sequences" title, and make sure the **Cut peak sequences: +/- ** option is set to **0** (we wish to analyze our full dataset)
   * Open the “Motif Discovery parameters” title, and check the **oligomer sizes 6 and 7** (but not 8). Check "Discover over-represented spaced word pairs **[dyad-analysis]**"
   * Under “Compare discovered motifs with databases”, **remove** "JASPAR core vertebrates" and **add RegulonDB prokaryotes** (2015_08) as the studied organism is the bacteria E. coli.
 5. You can indicate your email address in order to receive notification of the task submission and completion. This is particularly useful because the full analysis may take some time for very large datasets.
